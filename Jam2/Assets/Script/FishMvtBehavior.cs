@@ -5,7 +5,8 @@ public class FishMvtBehavior : MonoBehaviour
 {
     private Transform m_transform;
 
-    public float TimeBeforeChangingDirection = 3f;
+    public float MinTimeBeforeChangingDirection = 3f;
+    public float MaxTimeBeforeChangingDirection = 6f;
     public bool isAlive;
     [SerializeField] float m_Speed;
     [SerializeField] int health;
@@ -19,7 +20,7 @@ public class FishMvtBehavior : MonoBehaviour
     {
         isAlive = true;
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_currentTimer = TimeBeforeChangingDirection;
+        m_currentTimer = Random.Range(MinTimeBeforeChangingDirection, MaxTimeBeforeChangingDirection);
         m_transform = GetComponent<Transform>();
 
         // Binding Events
@@ -40,7 +41,7 @@ public class FishMvtBehavior : MonoBehaviour
             if (m_currentTimer <= 0)
             {
                 ChangeDirection();
-                m_currentTimer = TimeBeforeChangingDirection;
+                m_currentTimer = Random.Range(MinTimeBeforeChangingDirection, MaxTimeBeforeChangingDirection);
             }
         }
 

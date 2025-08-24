@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     InputAction moveAction;
     [SerializeField] int dashCooldown;
     float dashTimer = 0;
+
+    public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
+
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
     {
