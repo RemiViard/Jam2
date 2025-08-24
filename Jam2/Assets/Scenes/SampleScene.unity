@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 1029141121}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -539,6 +539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   baseMovementSpeed: 5
+  jumpForce: 5
   dashCooldown: 2
 --- !u!50 &1029141121
 Rigidbody2D:
@@ -566,7 +567,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &1029141122
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -583,7 +584,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -628,7 +629,7 @@ GameObject:
   - component: {fileID: 1075563674}
   m_Layer: 0
   m_Name: Island
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -840,8 +841,8 @@ Transform:
   m_GameObject: {fileID: 1616053558}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.86, y: -7.04, z: 5.35}
-  m_LocalScale: {x: 63.709698, y: 9.697, z: 0.2317}
+  m_LocalPosition: {x: 0, y: -26.516, z: 5.35}
+  m_LocalScale: {x: 160, y: 50, z: 0.2317}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1116883823}
