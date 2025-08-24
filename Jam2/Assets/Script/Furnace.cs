@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class Furnace : MonoBehaviour
 {
-    UnityEvent onInteract;
+    public UnityEvent onInteract;
 
     private void Start()
     {
