@@ -4,3 +4,4 @@ Jam2/Temp
 Jam2/.vs
 Jam2/obj/Debug
 Jam2/ProjectSettings
+*.csproj
