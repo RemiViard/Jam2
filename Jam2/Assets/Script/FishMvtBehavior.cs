@@ -13,7 +13,7 @@ public class FishMvtBehavior : MonoBehaviour
     private Rigidbody2D m_Rigidbody;
     private float m_currentTimer;
 
-    UnityEvent onDeath;
+    UnityEvent onDeath = new UnityEvent();
 
     void Start()
     {
@@ -45,11 +45,10 @@ public class FishMvtBehavior : MonoBehaviour
         }
 
     }
-
     private void ChangeDirection()
     {
-        Vector3 rot = Random.insideUnitCircle;
-        m_transform.Rotate(rot.x, rot.y, rot.z);
+        Vector2 rot = Random.insideUnitCircle.normalized;
+        m_transform.LookAt(m_transform.position + new Vector3(rot.x, rot.y, 0));
     }
 
     private void Move()
