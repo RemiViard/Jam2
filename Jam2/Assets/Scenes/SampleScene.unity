@@ -1464,6 +1464,7 @@ MonoBehaviour:
   TimeBeforeChangingDirection: 3
   isAlive: 1
   m_Speed: 25
+  health: 15
 --- !u!50 &1749889317
 Rigidbody2D:
   serializedVersion: 5

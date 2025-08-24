@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FishMvtBehavior : MonoBehaviour
 {
@@ -6,21 +7,32 @@ public class FishMvtBehavior : MonoBehaviour
 
     public float TimeBeforeChangingDirection = 3f;
     public bool isAlive;
-    public float m_Speed;
+    [SerializeField] float m_Speed;
+    [SerializeField] int health;
 
     private Rigidbody2D m_Rigidbody;
-
     private float m_currentTimer;
+
+    UnityEvent onDeath;
+
     void Start()
     {
         isAlive = true;
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_currentTimer = TimeBeforeChangingDirection;
         m_transform = GetComponent<Transform>();
+
+        // Binding Events
+        onDeath.AddListener(OnDeath);
     }
 
     void Update()
     {
+        if (health <= 0)
+        {
+            onDeath.Invoke();
+            isAlive = false;
+        }
         if (isAlive)
         {
             Move();
@@ -31,6 +43,7 @@ public class FishMvtBehavior : MonoBehaviour
                 m_currentTimer = TimeBeforeChangingDirection;
             }
         }
+
     }
 
     private void ChangeDirection()
@@ -42,5 +55,11 @@ public class FishMvtBehavior : MonoBehaviour
     private void Move()
     {
         m_Rigidbody.linearVelocity = m_transform.forward * m_Speed;
+    }
+
+    // Events
+    private void OnDeath()
+    {
+        // VFX OU SFX de la mort qui tue (litteralement)
     }
 }
