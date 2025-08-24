@@ -119,89 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &117482990
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 117482991}
-  - component: {fileID: 117482992}
-  - component: {fileID: 117482993}
-  m_Layer: 0
-  m_Name: InteractRange
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &117482991
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117482990}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1029141118}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &117482992
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117482990}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 2
---- !u!114 &117482993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117482990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30cf1262bd0b4449bcaffee9ca4a825, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractableDetector
-  actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  player: {fileID: 1029141120}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +954,6 @@ Transform:
   m_Children:
   - {fileID: 861812910}
   - {fileID: 330585546}
-  - {fileID: 117482991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1029141120
@@ -1118,8 +1034,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.3, y: 0.5}
+  m_Offset: {x: 0, y: -0.01647845}
+  m_Size: {x: 0.2923993, y: 0.5233553}
   m_Direction: 0
 --- !u!1001 &1058114267
 PrefabInstance:
@@ -1442,7 +1358,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1320028819}
   - component: {fileID: 1320028818}
-  - component: {fileID: 1320028820}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -1527,20 +1442,6 @@ RectTransform:
   m_AnchoredPosition: {x: 4.91, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1320028820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1320028817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30cf1262bd0b4449bcaffee9ca4a825, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractableDetector
-  actions: {fileID: 0}
-  player: {fileID: 0}
 --- !u!1001 &1413181777
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1941,10 +1842,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5667696631033779004, guid: 0dd9eb83732297240ba7f0d524096c72, type: 3}
-      propertyPath: prefabBiscuit
-      value: 
-      objectReference: {fileID: 4967225104236299225, guid: cb5780f4c1831c644a37beecca3f5b03, type: 3}
     - target: {fileID: 7870396248976837892, guid: 0dd9eb83732297240ba7f0d524096c72, type: 3}
       propertyPath: m_Name
       value: Fish_Furnace_Prefab
