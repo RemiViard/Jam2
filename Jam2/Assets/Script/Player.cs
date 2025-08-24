@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
             switch (state)
             {
                 case PlayerState.OnLand:
-                    transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                    transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
                     break;
                 case PlayerState.InWater:
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
     }
     bool CheckGround()
     {
-        float _distanceToTheGround = GetComponent<Collider2D>().bounds.extents.y;
+        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y/2;
 
         RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position + Vector3.down * _distanceToTheGround, Vector3.down,  + 0.3f);
         Debug.Log(hit.Length);
@@ -106,11 +106,14 @@ public class Player : MonoBehaviour
     }
     public void EnterWater()
     {
-        state = PlayerState.InWater;  
+        state = PlayerState.InWater;
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = 0f;
     }
     public void ExitWater()
     {
         state = PlayerState.OnLand;
+        rb.gravityScale = 1f;
     }
     private void OnDrawGizmos()
     {
