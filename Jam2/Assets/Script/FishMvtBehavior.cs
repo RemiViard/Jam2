@@ -13,7 +13,7 @@ public class FishMvtBehavior : MonoBehaviour
     private Rigidbody2D m_Rigidbody;
     private float m_currentTimer;
 
-    UnityEvent onDeath;
+    public UnityEvent onDeath;
 
     void Start()
     {
