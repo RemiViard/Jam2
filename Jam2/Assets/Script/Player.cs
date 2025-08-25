@@ -10,13 +10,20 @@ public class Player : MonoBehaviour
     [Header("Stats")]
     [SerializeField] int baseMovementSpeed;
     [SerializeField] int jumpForce;
-    [SerializeField] int dashCooldown;
 
+    //Dive variables
+    [SerializeField] int dashCooldown;
+    [SerializeField] float diveFadeTime;
+    Vector2 diveForceInitial = new Vector2(0, 0);
+    Vector2 diveForce = new Vector2(0, 0);
+    float diveFadeTimer = 0;
+    
     Rigidbody2D rb;
     float movementSpeed;
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
+    
     
     float dashTimer = 0;
 
@@ -43,13 +50,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
-        if(Mathf.Abs(movementInput.x) > 0)
+        if (Mathf.Abs(movementInput.x) > 0)
         {
             bool newDirection = movementInput.x < 0;
-            if(newDirection != currentDirection)
+            if (newDirection != currentDirection)
             {
                 currentDirection = newDirection;
                 spriteRenderer.flipX = currentDirection;
@@ -62,21 +69,27 @@ public class Player : MonoBehaviour
                 {
                     transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
                 }
-                
                 break;
             case PlayerState.InWater:
                 if (movementInput != Vector2.zero)
                 {
-                    rb.totalForce = Vector2.zero;
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
-                    
+                }
+                //Diving Logic
+                if (diveFadeTimer > 0)
+                {
+                    transform.Translate(diveForce * Time.deltaTime);
+                    diveForce = Vector2.Lerp(diveForceInitial, Vector2.zero, 1 - diveFadeTimer/diveFadeTime);
+                    diveFadeTimer -= Time.deltaTime;
                 }
                 else
-                    if(rb.totalForce == Vector2.zero)
-                        rb.AddForceY(1 * Time.deltaTime, ForceMode2D.Force);
+                {
+                    diveFadeTimer = 0;
+                    diveForce = Vector2.zero;
+                    diveForceInitial = Vector2.zero;
+                }
                 break;
         }
-        Debug.Log(rb.totalForce);
         //Reduce dash Speed and Cooldown
         if (dashTimer > 0)
         {
@@ -87,6 +100,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+    #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
 
@@ -96,30 +110,30 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case PlayerState.OnLand:
-                if(CheckGround())
+                if (CheckGround())
                 {
                     rb.linearVelocityY = jumpForce;
-                    //rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
                 }
-                    
+
                 break;
             case PlayerState.InWater:
                 if (dashTimer == 0)
                 {
                     //movementSpeed *= 2;
+                    rb.linearVelocity = Vector2.zero;
                     dashTimer = dashCooldown;
                 }
                 break;
         }
-        
     }
-    bool CheckGround()
+        #endregion
+        bool CheckGround()
     {
-        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y/2;
+        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y / 2;
 
-        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position + Vector3.down * _distanceToTheGround, Vector3.down,  + 0.3f);
-        Debug.Log(hit.Length);
-        
+        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position + Vector3.down * _distanceToTheGround, Vector3.down, +0.3f);
+
         foreach (RaycastHit2D h in hit)
         {
             if (h.collider.gameObject.CompareTag("Ground"))
@@ -133,16 +147,16 @@ public class Player : MonoBehaviour
     public void EnterWater()
     {
         state = PlayerState.InWater;
-        rb.linearVelocity /= 2f;
+        diveForceInitial = new Vector2(movementInput.x * movementSpeed, rb.linearVelocityY);
+        diveForce = diveForceInitial;
+        diveFadeTimer = diveFadeTime;
+        rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
+
     }
     public void ExitWater()
     {
         state = PlayerState.OnLand;
         rb.gravityScale = 1f;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position + Vector3.down * 0.1f, transform.position + Vector3.down * 0.1f + Vector3.down * 0.01f);
     }
 }
