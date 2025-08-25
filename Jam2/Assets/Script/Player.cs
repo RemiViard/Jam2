@@ -11,13 +11,23 @@ public class Player : MonoBehaviour
     [SerializeField] int baseMovementSpeed;
     [SerializeField] int jumpForce;
 
-    //Dive variables
+    [Header("Dash")]
     [SerializeField] int dashCooldown;
+    [SerializeField] int dashSpeed;
+    [SerializeField] float dashDuration;
+    Vector2 dashForceInitial = new Vector2(0, 0);
+    Vector2 dashForce = new Vector2(0, 0);
+    float dashCooldownTimer = 0;
+    float dashReleaseTimer = 0;
+    [Header("Dive")]
+    //Dive variables
     [SerializeField] float diveFadeTime;
     Vector2 diveForceInitial = new Vector2(0, 0);
     Vector2 diveForce = new Vector2(0, 0);
     float diveFadeTimer = 0;
+   
     
+
     Rigidbody2D rb;
     float movementSpeed;
     bool currentDirection = false;
@@ -25,7 +35,7 @@ public class Player : MonoBehaviour
     InputAction moveAction;
     
     
-    float dashTimer = 0;
+    
 
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
 
@@ -71,15 +81,38 @@ public class Player : MonoBehaviour
                 }
                 break;
             case PlayerState.InWater:
-                if (movementInput != Vector2.zero)
+                //Swimming Logic
+                if (movementInput != Vector2.zero && dashReleaseTimer == 0)
                 {
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                }
+                //Dash Logic
+                else if (dashReleaseTimer > 0)
+                {
+                    transform.Translate(dashForce * Time.deltaTime * dashSpeed);
+                    dashForce = Vector2.Lerp(dashForceInitial, Vector2.zero, 1 - dashReleaseTimer/dashDuration);
+                    dashReleaseTimer -= Time.deltaTime;
+                    if (dashReleaseTimer <= 0)
+                    {
+                        dashReleaseTimer = 0;
+                        dashForce = Vector2.zero;
+                        dashForceInitial = Vector2.zero;
+                    }
+                }
+                //Dash Cooldown
+                if (dashCooldownTimer > 0)
+                {
+                    dashCooldownTimer -= Time.deltaTime;
+                    if (dashCooldownTimer <= 0)
+                    {
+                        dashCooldownTimer = 0;
+                    }
                 }
                 //Diving Logic
                 if (diveFadeTimer > 0)
                 {
                     transform.Translate(diveForce * Time.deltaTime);
-                    diveForce = Vector2.Lerp(diveForceInitial, Vector2.zero, 1 - diveFadeTimer/diveFadeTime);
+                    diveForce = Vector2.Lerp(diveForceInitial, Vector2.zero, 1 - diveFadeTimer / diveFadeTime);
                     diveFadeTimer -= Time.deltaTime;
                 }
                 else
@@ -91,12 +124,12 @@ public class Player : MonoBehaviour
                 break;
         }
         //Reduce dash Speed and Cooldown
-        if (dashTimer > 0)
+        if (dashCooldownTimer > 0)
         {
-            dashTimer -= Time.deltaTime;
-            if (dashTimer <= 0)
+            dashCooldownTimer -= Time.deltaTime;
+            if (dashCooldownTimer <= 0)
             {
-                dashTimer = 0;
+                dashCooldownTimer = 0;
             }
         }
     }
@@ -115,14 +148,14 @@ public class Player : MonoBehaviour
                     rb.linearVelocityY = jumpForce;
                     rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
                 }
-
                 break;
             case PlayerState.InWater:
-                if (dashTimer == 0)
+                if (dashCooldownTimer == 0)
                 {
-                    //movementSpeed *= 2;
-                    rb.linearVelocity = Vector2.zero;
-                    dashTimer = dashCooldown;
+                    dashCooldownTimer = dashCooldown;
+                    dashReleaseTimer = dashDuration;
+                    Vector2 direction = movementInput!= Vector2.zero ? movementInput : new Vector2(currentDirection ? -1 : 1, 0);
+                    dashForceInitial = direction * dashSpeed;
                 }
                 break;
         }
