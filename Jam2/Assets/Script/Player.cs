@@ -4,14 +4,20 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class Player : MonoBehaviour
 {
+    [Header("Reference")]
     [SerializeField] InputActionAsset actions;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [Header("Stats")]
     [SerializeField] int baseMovementSpeed;
     [SerializeField] int jumpForce;
+    [SerializeField] int dashCooldown;
+
     Rigidbody2D rb;
     float movementSpeed;
+    bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
-    [SerializeField] int dashCooldown;
+    
     float dashTimer = 0;
 
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
@@ -37,25 +43,45 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
-        if(movementInput != Vector2.zero)
+        if(Mathf.Abs(movementInput.x) > 0)
         {
-            switch (state)
+            bool newDirection = movementInput.x < 0;
+            if(newDirection != currentDirection)
             {
-                case PlayerState.OnLand:
-                    transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
-                    break;
-                case PlayerState.InWater:
-                    transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
-                    break;
-            }         
+                currentDirection = newDirection;
+                spriteRenderer.flipX = currentDirection;
+            }
         }
+        switch (state)
+        {
+            case PlayerState.OnLand:
+                if (movementInput != Vector2.zero)
+                {
+                    transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
+                }
+                
+                break;
+            case PlayerState.InWater:
+                if (movementInput != Vector2.zero)
+                {
+                    rb.totalForce = Vector2.zero;
+                    transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                    
+                }
+                else
+                    if(rb.totalForce == Vector2.zero)
+                        rb.AddForceY(1 * Time.deltaTime, ForceMode2D.Force);
+                break;
+        }
+        Debug.Log(rb.totalForce);
         //Reduce dash Speed and Cooldown
         if (dashTimer > 0)
         {
             dashTimer -= Time.deltaTime;
-            if(dashTimer <= 0)
+            if (dashTimer <= 0)
             {
                 dashTimer = 0;
             }
@@ -107,7 +133,7 @@ public class Player : MonoBehaviour
     public void EnterWater()
     {
         state = PlayerState.InWater;
-        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity /= 2f;
         rb.gravityScale = 0f;
     }
     public void ExitWater()
