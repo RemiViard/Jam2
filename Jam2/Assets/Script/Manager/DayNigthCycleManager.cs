@@ -20,16 +20,24 @@ public class DayNigthCycleManager : MonoBehaviour
         timer += Time.deltaTime;
         if (state == DayNightCycleState.Day && timer >= dayDurationSec)
         {
-            state = DayNightCycleState.Night;
-            timer = 0f;
-            Debug.Log("It's now Night");
+            SwitchToNight();
         }
         else if (state == DayNightCycleState.Night && timer >= nightDurationSec)
         {
-            state = DayNightCycleState.Day;
-            timer = 0f;
-            Debug.Log("It's now Day");
+            SwitchToDay();
         }
+    }
+    private void SwitchToDay()
+    {
+        state = DayNightCycleState.Day;
+        timer = 0f;
+        Debug.Log("It's now Day");
+    }
+    private void SwitchToNight()
+    {
+        state = DayNightCycleState.Night;
+        timer = 0f;
+        Debug.Log("It's now Night");
     }
 
 }

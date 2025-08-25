@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] InputActionAsset actions;
     [SerializeField] SpriteRenderer spriteRenderer;
     [Header("Stats")]
-    [SerializeField] int baseMovementSpeed;
+    [SerializeField] int movementSpeed;
     [SerializeField] int jumpForce;
 
     [Header("Dash")]
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     Vector2 dashForce = new Vector2(0, 0);
     float dashCooldownTimer = 0;
     float dashReleaseTimer = 0;
+
     [Header("Dive")]
     //Dive variables
     [SerializeField] float diveFadeTime;
@@ -29,14 +30,10 @@ public class Player : MonoBehaviour
     
 
     Rigidbody2D rb;
-    float movementSpeed;
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
     
-    
-    
-
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
 
     PlayerState state = PlayerState.OnLand;
@@ -54,7 +51,6 @@ public class Player : MonoBehaviour
         actions.FindAction("Attack").performed += OnAttack;
         actions.FindAction("Dash").performed += OnDash;
         actions.Enable();
-        movementSpeed = baseMovementSpeed;
     }
 
     // Update is called once per frame
@@ -63,6 +59,7 @@ public class Player : MonoBehaviour
 
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
+        
         if (Mathf.Abs(movementInput.x) > 0)
         {
             bool newDirection = movementInput.x < 0;
