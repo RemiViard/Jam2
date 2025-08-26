@@ -9,10 +9,15 @@ public class Furnace : MonoBehaviour, IInteractable
     public UnityEvent onBiscuitAdded;
     [SerializeField] GameObject prefabBiscuit;
 
+    public UnityEvent onCanInteract;
+    public UnityEvent onStopInteract;
+
     private void Start()
     {
         onInteract.AddListener(OnInteractEvent);
         onBiscuitAdded.AddListener(OnBiscuitAdded);
+        onCanInteract.AddListener(OnCanInteract);
+        onStopInteract.AddListener(OnStopInteract);
     }
     public bool CanInteract()
     {
@@ -20,7 +25,6 @@ public class Furnace : MonoBehaviour, IInteractable
     }
     public void Interact(Player player)
     {
-        Debug.Log("interact");
         onInteract.Invoke();
         
         int nbBiscuits = player.nbBiscuits;
@@ -35,6 +39,14 @@ public class Furnace : MonoBehaviour, IInteractable
         }
     }
     private void OnInteractEvent()
+    {
+
+    }
+    private void OnCanInteract()
+    {
+
+    }
+    private void OnStopInteract()
     {
 
     }

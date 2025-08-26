@@ -16,16 +16,27 @@ public class PlayerInteractableDetector : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.TryGetComponent(out IInteractable interactable))
+        {
             interactableInRange = interactable;
+            if (collision.TryGetComponent<Furnace>(out Furnace furnace))
+            {
+                furnace.onCanInteract?.Invoke();
+            }
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (interactableInRange != null)
+        {
+            if (collision.TryGetComponent<Furnace>(out Furnace furnace))
+            {
+                furnace.onStopInteract?.Invoke();
+            }
             interactableInRange = null;
+        }
     }
     void OnInteract(InputAction.CallbackContext callbackContext)
     {
-        Debug.Log("wesh wesh");
         if (interactableInRange != null)
             interactableInRange.Interact(player);
     }
