@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [Header("Reference")]
     [SerializeField] InputActionAsset actions;
     [SerializeField] Animator animator;
+    [SerializeField] Transform spawnPoint;
 
     [Header("Stats")]
     [SerializeField] int movementSpeed;
@@ -29,18 +30,17 @@ public class Player : MonoBehaviour
     Vector2 diveForceInitial = new Vector2(0, 0);
     Vector2 diveForce = new Vector2(0, 0);
     float diveFadeTimer = 0;
-
-
-
+   
     Rigidbody2D rb;
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
 
-    int maxO2 = 60;
+    int maxO2 = 10;
     public float O2;
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
+    public UnityEvent OnDeath = new UnityEvent(); // v2 :event pour la mort du joueur
 
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
@@ -199,6 +199,7 @@ public class Player : MonoBehaviour
         return false;
 
     }
+    #region WaterZone
     public void EnterWater()
     {
         state = PlayerState.InWater;
@@ -214,9 +215,25 @@ public class Player : MonoBehaviour
         rb.gravityScale = 1f;
         O2Change(maxO2);
     }
+    #endregion
     private void O2Change(float value)
     {
         O2 = value;
         OnO2ValueChange.Invoke(O2 / maxO2);
+        if(O2 <= 0)
+        {
+            O2 = 0;
+            Die();
+        }
+        else if (O2 > maxO2)
+        {
+            O2 = maxO2;
+        }
+    }
+    private void Die()
+    {
+        OnDeath.Invoke();
+        transform.position = spawnPoint.position;
+        O2Change(maxO2);
     }
 }
