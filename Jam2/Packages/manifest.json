@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "com.sinnwrig.fogvolumes": "https://github.com/sinnwrig/URP-Fog-Volumes.git",
+    "com.unity.2d.animation": "12.0.2",
+    "com.unity.2d.psdimporter": "11.0.1",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "2.0.8",
     "com.unity.collab-proxy": "2.9.2",
