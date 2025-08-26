@@ -1,4 +1,6 @@
+using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -33,8 +35,11 @@ public class Player : MonoBehaviour
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
-    
+
+    int maxO2 = 60;
+    public float O2;
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
+    public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
 
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
@@ -51,6 +56,8 @@ public class Player : MonoBehaviour
         actions.FindAction("Attack").performed += OnAttack;
         actions.FindAction("Dash").performed += OnDash;
         actions.Enable();
+        O2 = maxO2;
+        OnO2ValueChange.Invoke(O2 / maxO2);
     }
 
     // Update is called once per frame
@@ -118,6 +125,8 @@ public class Player : MonoBehaviour
                     diveForce = Vector2.zero;
                     diveForceInitial = Vector2.zero;
                 }
+                //O2 Logics
+                O2Change(O2 - Time.deltaTime);
                 break;
         }
         //Reduce dash Speed and Cooldown
@@ -182,11 +191,16 @@ public class Player : MonoBehaviour
         diveFadeTimer = diveFadeTime;
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
-
     }
     public void ExitWater()
     {
         state = PlayerState.OnLand;
         rb.gravityScale = 1f;
+        O2Change(maxO2);
+    }
+    private void O2Change(float value)
+    {
+        O2 = value;
+        OnO2ValueChange.Invoke(O2 / maxO2);
     }
 }
