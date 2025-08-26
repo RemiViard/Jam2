@@ -168,6 +168,7 @@ public class Player : MonoBehaviour
                 {
                     rb.linearVelocityY = jumpForce;
                     rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    animator.SetTrigger("Jump");
                 }
                 break;
             case PlayerState.InWater:
