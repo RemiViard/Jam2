@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     [Header("Reference")]
     [SerializeField] InputActionAsset actions;
-    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Animator animator;
     [SerializeField] Transform spawnPoint;
 
     [Header("Stats")]
@@ -67,14 +67,14 @@ public class Player : MonoBehaviour
 
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
-        
+
         if (Mathf.Abs(movementInput.x) > 0)
         {
             bool newDirection = movementInput.x < 0;
             if (newDirection != currentDirection)
             {
                 currentDirection = newDirection;
-                spriteRenderer.flipX = currentDirection;
+                // spriteRenderer.flipX = currentDirection;
             }
         }
         switch (state)
@@ -83,6 +83,13 @@ public class Player : MonoBehaviour
                 if (movementInput != Vector2.zero)
                 {
                     transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
+                    if (!animator.GetBool("isWalking"))
+                        animator.SetBool("isWalking", true);
+                }
+                else
+                {
+                    if (animator.GetBool("isWalking"))
+                        animator.SetBool("isWalking", false);
                 }
                 break;
             case PlayerState.InWater:
@@ -90,12 +97,14 @@ public class Player : MonoBehaviour
                 if (movementInput != Vector2.zero && dashReleaseTimer == 0)
                 {
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                    if (!animator.GetBool("isSwimming"))
+                        animator.SetBool("isSwimming", true);
                 }
                 //Dash Logic
                 else if (dashReleaseTimer > 0)
                 {
                     transform.Translate(dashForce * Time.deltaTime * dashSpeed);
-                    dashForce = Vector2.Lerp(dashForceInitial, Vector2.zero, 1 - dashReleaseTimer/dashDuration);
+                    dashForce = Vector2.Lerp(dashForceInitial, Vector2.zero, 1 - dashReleaseTimer / dashDuration);
                     dashReleaseTimer -= Time.deltaTime;
                     if (dashReleaseTimer <= 0)
                     {
@@ -103,6 +112,11 @@ public class Player : MonoBehaviour
                         dashForce = Vector2.zero;
                         dashForceInitial = Vector2.zero;
                     }
+                }
+                else
+                {
+                    if (animator.GetBool("isSwimming"))
+                        animator.SetBool("isSwimming", false);
                 }
                 //Dash Cooldown
                 if (dashCooldownTimer > 0)
@@ -161,14 +175,14 @@ public class Player : MonoBehaviour
                 {
                     dashCooldownTimer = dashCooldown;
                     dashReleaseTimer = dashDuration;
-                    Vector2 direction = movementInput!= Vector2.zero ? movementInput : new Vector2(currentDirection ? -1 : 1, 0);
+                    Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(currentDirection ? -1 : 1, 0);
                     dashForceInitial = direction * dashSpeed;
                 }
                 break;
         }
     }
-        #endregion
-        bool CheckGround()
+    #endregion
+    bool CheckGround()
     {
         float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y / 2;
 
