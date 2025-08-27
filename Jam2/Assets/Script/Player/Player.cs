@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
+    float baseGravityScale;
 
     [SerializeField] int maxO2 = 10;
     float O2;
@@ -66,6 +67,7 @@ public class Player : MonoBehaviour
         actions.Enable();
         O2 = maxO2;
         OnO2ValueChange.Invoke(O2 / maxO2);
+        baseGravityScale = rb.gravityScale;
     }
 
     // Update is called once per frame
@@ -82,7 +84,6 @@ public class Player : MonoBehaviour
             {
                 currentDirection = newDirection;
                 pivot.localRotation = Quaternion.Euler(0, currentDirection ? -90 : 90, 0);
-                // spriteRenderer.flipX = currentDirection;
             }
         }
         switch (state)
@@ -165,7 +166,6 @@ public class Player : MonoBehaviour
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
-       
         if (PunchCooldownTimer <= 0)
         {
             animator.SetTrigger("Punch");
@@ -180,7 +180,8 @@ public class Player : MonoBehaviour
             case PlayerState.OnLand:
                 if (CheckGround())
                 {
-                    rb.linearVelocityY = jumpForce;
+
+                    rb.linearVelocityY = 0;
                     rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
                     animator.SetTrigger("Jump");
                 }
@@ -225,13 +226,16 @@ public class Player : MonoBehaviour
         diveForceInitial = new Vector2(movementInput.x * movementSpeed, rb.linearVelocityY);
         diveForce = diveForceInitial;
         diveFadeTimer = diveFadeTime;
+        Debug.Log(rb.linearVelocity);
         rb.linearVelocity = Vector2.zero;
+        
         rb.gravityScale = 0f;
     }
     public void ExitWater()
     {
         state = PlayerState.OnLand;
-        rb.gravityScale = 1f;
+        rb.gravityScale = baseGravityScale;
+        
         O2Change(maxO2);
     }
     #endregion

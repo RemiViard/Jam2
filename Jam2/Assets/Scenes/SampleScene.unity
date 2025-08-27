@@ -2540,14 +2540,14 @@ MonoBehaviour:
   attackHitBox: {fileID: 823867053}
   pivot: {fileID: 413444204}
   movementSpeed: 5
-  jumpForce: 10
+  jumpForce: 25
   dashCooldown: 2
   dashSpeed: 7
   dashDuration: 0.15
   punchDamage: 1
   punchCooldown: 1
   diveFadeTime: 1
-  maxO2: 100
+  maxO2: 3
   nbBiscuits: 4
   OnO2ValueChange:
     m_PersistentCalls:
@@ -2592,7 +2592,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!70 &1029141122
 CapsuleCollider2D:
