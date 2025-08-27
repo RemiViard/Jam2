@@ -9,6 +9,9 @@ public class Furnace : MonoBehaviour, IInteractable
     public UnityEvent onBiscuitAdded;
     [SerializeField] GameObject prefabBiscuit;
 
+    [SerializeField] Transform HUDPos;
+    [SerializeField] Transform TargetPos;
+
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
 
@@ -26,7 +29,7 @@ public class Furnace : MonoBehaviour, IInteractable
     public void Interact(Player player)
     {
         onInteract.Invoke();
-        
+
         int nbBiscuits = player.nbBiscuits;
         StartCoroutine(WaitAndGainCookie(nbBiscuits));
     }
@@ -52,23 +55,27 @@ public class Furnace : MonoBehaviour, IInteractable
     }
     private void OnBiscuitAdded()
     {
-        GameObject go = Instantiate(prefabBiscuit, this.transform);
+        GameObject go = Instantiate(prefabBiscuit, HUDPos);
+        go.transform.localPosition = Vector3.zero;
         StartCoroutine(TryGoToHUD(go));
     }
-    IEnumerator TryGoToHUD(GameObject _go)
+    IEnumerator TryGoToHUD(GameObject _biscuit)
     {
-        float startTime = Time.time; 
+        float startTime = Time.time;
 
-        while (Time.time - startTime <= 10f)
-        { 
-            _go.transform.position = Vector3.Lerp(_go.transform.position, new Vector3(30,10,5), Time.deltaTime); 
-            yield return new WaitForEndOfFrame();
+        Vector3 basePos = Camera.main.WorldToScreenPoint(transform.position);
+        _biscuit.GetComponent<RectTransform>().position = basePos;
+
+        float t = 0;
+
+        while (t <= 2f)
+        {
+            _biscuit.transform.position = Vector3.Lerp(basePos, TargetPos.position, t);
+            t += Time.deltaTime;
+
+            yield return 0;
         }
-        yield return DestroyCookies(_go);
-    }
-    IEnumerator DestroyCookies(GameObject _go)
-    {
-        Destroy(_go);
-        yield return new WaitForEndOfFrame();
+        _biscuit.GetComponent<Animator>().SetTrigger("Destroy");
+        Destroy(_biscuit);
     }
 }
