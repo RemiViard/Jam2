@@ -12,6 +12,7 @@ public class Fish : MonoBehaviour
     private Rigidbody2D m_Rigidbody;
     private float m_currentTimer;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Hurtbox hurtbox;
     public UnityEvent onDeath = new UnityEvent();
 
     void Start()
@@ -19,7 +20,6 @@ public class Fish : MonoBehaviour
         isAlive = true;
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_currentTimer = Random.Range(MinTimeBeforeChangingDirection, MaxTimeBeforeChangingDirection);
-        
         // Binding Events
         onDeath.AddListener(OnDeath);
     }
@@ -27,6 +27,7 @@ public class Fish : MonoBehaviour
     {
         spriteRenderer.sprite = species.fishSprite;
         gameObject.name = species.speciesName;
+        hurtbox.InitBoxSize(species.hurtBox);
     }
     void Update()
     {

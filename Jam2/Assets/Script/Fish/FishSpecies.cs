@@ -13,5 +13,6 @@ public class FishSpecies : ScriptableObject
     public Sprite fishSprite;
     public int Hp;
     public float speed;
+    public Vector4 hurtBox; // x, y, width, height
 }
 // This is a ScriptableObject that can be used to define different fish species in the game.
