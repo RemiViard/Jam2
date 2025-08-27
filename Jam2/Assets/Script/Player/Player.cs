@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
             if (newDirection != currentDirection)
             {
                 currentDirection = newDirection;
+                pivot.localRotation = Quaternion.Euler(0, currentDirection ? -90 : 90, 0);
                 // spriteRenderer.flipX = currentDirection;
             }
         }
