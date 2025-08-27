@@ -23,7 +23,6 @@ public class FishSpawner : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(currentFishCount);
         if (currentFishCount < numberOfFish)
         {
             timer += Time.deltaTime;

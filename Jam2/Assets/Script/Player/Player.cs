@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField] InputActionAsset actions;
     [SerializeField] Animator animator;
     [SerializeField] Transform spawnPoint;
+    [SerializeField] BoxCollider2D attackHitBox;
+    [SerializeField] Transform pivot;
 
     [Header("Stats")]
     [SerializeField] int movementSpeed;
@@ -24,6 +26,11 @@ public class Player : MonoBehaviour
     float dashCooldownTimer = 0;
     float dashReleaseTimer = 0;
 
+    [Header("Punch")]
+    [SerializeField] int punchDamage = 1;
+    [SerializeField] float punchCooldown = 1f;
+    float PunchCooldownTimer = 0;
+
     [Header("Dive")]
     //Dive variables
     [SerializeField] float diveFadeTime;
@@ -36,8 +43,8 @@ public class Player : MonoBehaviour
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
 
-    int maxO2 = 10;
-    public float O2;
+    [SerializeField] int maxO2 = 10;
+    float O2;
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
     public UnityEvent OnDeath = new UnityEvent(); // v2 :event pour la mort du joueur
@@ -118,15 +125,6 @@ public class Player : MonoBehaviour
                     if (animator.GetBool("isSwimming"))
                         animator.SetBool("isSwimming", false);
                 }
-                //Dash Cooldown
-                if (dashCooldownTimer > 0)
-                {
-                    dashCooldownTimer -= Time.deltaTime;
-                    if (dashCooldownTimer <= 0)
-                    {
-                        dashCooldownTimer = 0;
-                    }
-                }
                 //Diving Logic
                 if (diveFadeTimer > 0)
                 {
@@ -144,7 +142,7 @@ public class Player : MonoBehaviour
                 O2Change(O2 - Time.deltaTime);
                 break;
         }
-        //Reduce dash Speed and Cooldown
+        //Dash Cooldown
         if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
@@ -153,12 +151,27 @@ public class Player : MonoBehaviour
                 dashCooldownTimer = 0;
             }
         }
+        //Punch Cooldown
+        if (PunchCooldownTimer > 0)
+        {
+            PunchCooldownTimer -= Time.deltaTime;
+            if (PunchCooldownTimer <= 0)
+            {
+                PunchCooldownTimer = 0;
+            }
+        }
     }
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
-
+       
+        if (PunchCooldownTimer <= 0)
+        {
+            animator.SetTrigger("Punch");
+            PunchCooldownTimer = punchCooldown;
+        }
     }
+    
     void OnDash(InputAction.CallbackContext callbackContext)
     {
         switch (state)
@@ -197,6 +210,11 @@ public class Player : MonoBehaviour
             }
         }
         return false;
+
+    }
+    void ActivateHitbox(bool value)
+    {
+        attackHitBox.enabled = value;
 
     }
     #region WaterZone
