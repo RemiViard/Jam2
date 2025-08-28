@@ -6,7 +6,6 @@ public class Fog_PostProcess : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
 
         if (other.TryGetComponent<Camera>(out Camera camera))
         {
@@ -17,7 +16,6 @@ public class Fog_PostProcess : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log(other.gameObject.name);
 
         if (other.TryGetComponent<Camera>(out Camera camera))
         {
