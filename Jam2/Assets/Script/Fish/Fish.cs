@@ -22,6 +22,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] float rotDuration;
     BehaviorState state = BehaviorState.Neutral;
     Vector3 currentDir = Vector3.zero;
+    public BoxCollider2D deptZone;
     public enum FishBehavior
     {
         Fleeing,
@@ -59,9 +60,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
             switch (state)
             {
                 case BehaviorState.Fleeing:
-                    Vector3 dir = (transform.position - Player.playerTransform.position).normalized;
-                    transform.LookAt(transform.position + dir);
-                    transform.position += dir * species.speed * Time.deltaTime;
+                    Move(species.speed);
                     if (Vector3.Distance(transform.position, Player.playerTransform.position) >= detectionRange)
                     {
                         state = BehaviorState.Neutral;
@@ -73,11 +72,17 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                         case FishBehavior.Fleeing:
                             if(Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
                             {
+                                currentDir = (transform.position - Player.playerTransform.position).normalized;
+                                transform.LookAt(transform.position + currentDir);
                                 state = BehaviorState.Fleeing;
                             }
                             break;
                         case FishBehavior.Neutral:
-                            rb.linearVelocity = transform.forward * species.speed / 2 * Time.deltaTime;
+                            if(currentDir != Vector3.zero)    
+                                transform.LookAt(transform.position + currentDir);
+                            else
+                                ChangeDirection();
+                            Move(species.speed/2);
                             break;
                         case FishBehavior.Aggressive:
                             if (Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
@@ -108,9 +113,26 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     }
     private void ChangeDirection()
     {
-        Vector2 rot = Random.insideUnitCircle.normalized;
-        transform.LookAt(transform.position + new Vector3(rot.x, rot.y, 0));
+        currentDir = Random.insideUnitCircle.normalized;
     }
+    void Move(float speed)
+    {
+        CheckBound();
+        transform.position += currentDir * speed * Time.deltaTime;
+    }
+    void CheckBound()
+    {
+        if(currentDir == null)
+            ChangeDirection();
+        Debug.Log(transform.position + currentDir * Time.deltaTime);
+        Debug.Log(deptZone.bounds.Contains(transform.position + currentDir * Time.deltaTime));
+        if (!deptZone.bounds.Contains(transform.position + currentDir * Time.deltaTime))
+        {
+            currentDir = - currentDir;
+            transform.LookAt(transform.position + currentDir);
+        }
+    }
+    
     public void OnHurt(int damage)
     {
         Hp -= damage;
