@@ -31,6 +31,8 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         spriteRenderer.sprite = species.fishSprite;
         gameObject.name = species.speciesName;
         hurtbox.InitBoxSize(species.hurtBox);
+        if (species.scale != 0)
+            transform.localScale = Vector3.one * species.scale;
     }
     void Update()
     {
