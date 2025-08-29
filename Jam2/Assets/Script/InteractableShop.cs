@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Shop : MonoBehaviour, IInteractable
+public class InteractableShop : MonoBehaviour, IInteractable
 {
     public UnityEvent onInteract;
-
     private void Start()
     {
         onInteract.AddListener(OnInteractEvent);
