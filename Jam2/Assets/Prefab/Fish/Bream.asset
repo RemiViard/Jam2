@@ -20,3 +20,4 @@ MonoBehaviour:
   hurtBox: {x: 0, y: 0, z: 0.7, w: 0.3}
   scale: 0.2
   fishBiscuit: {fileID: 21300000, guid: f3dbdf10dfc22ab44817babc023b9ec9, type: 3}
+  value: 1

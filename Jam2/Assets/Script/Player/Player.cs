@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -55,6 +56,10 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
     public UnityEvent OnDeath = new UnityEvent(); // v2 :event pour la mort du joueur
     bool OnLand = true;
+
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI TextCountBiscuits;
+
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
     {
@@ -71,11 +76,18 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         actions.FindAction("Attack").performed += OnAttack;
         actions.FindAction("Dash").performed += OnDash;
         actions.Enable();
+        nbBiscuits = 0;
+        UpdateUI();
         O2 = maxO2;
         OnO2ValueChange.Invoke(O2 / maxO2);
         baseGravityScale = rb.gravityScale;
         if (playerTransform == null)
             playerTransform = transform;
+    }
+
+    public void UpdateUI()
+    {
+        TextCountBiscuits.text = nbBiscuits.ToString();
     }
 
     // Update is called once per frame

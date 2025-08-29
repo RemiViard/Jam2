@@ -2824,7 +2824,7 @@ MonoBehaviour:
   diveFadeTime: 1
   isFlip: 0
   maxO2: 100
-  nbBiscuits: 4
+  nbBiscuits: 0
   OnO2ValueChange:
     m_PersistentCalls:
       m_Calls:
@@ -2842,7 +2842,20 @@ MonoBehaviour:
         m_CallState: 2
   OnDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1752132039}
+        m_TargetAssemblyTypeName: Furnace, Assembly-CSharp
+        m_MethodName: ResetWaitingFishes
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  TextCountBiscuits: {fileID: 1747954128}
 --- !u!50 &1029141121
 Rigidbody2D:
   serializedVersion: 5
@@ -4845,6 +4858,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1747954128 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6822862739547349620, guid: 524aaafe8b3b5384a9d55b2bc3796917, type: 3}
+  m_PrefabInstance: {fileID: 7169189705186546415}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &1752132039 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5667696631033779004, guid: 0dd9eb83732297240ba7f0d524096c72, type: 3}
+  m_PrefabInstance: {fileID: 6626205039805909048}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6eba83c1b7cbcd4c904bd2666247c4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Furnace
 --- !u!1 &1806742414
 GameObject:
   m_ObjectHideFlags: 0
