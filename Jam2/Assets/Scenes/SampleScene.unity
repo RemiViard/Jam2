@@ -1346,6 +1346,7 @@ Transform:
   m_Children:
   - {fileID: 823867052}
   - {fileID: 139652356}
+  - {fileID: 1186500945}
   m_Father: {fileID: 1029141118}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &482946038
@@ -2543,7 +2544,6 @@ GameObject:
   - component: {fileID: 1029141118}
   - component: {fileID: 1029141120}
   - component: {fileID: 1029141121}
-  - component: {fileID: 1029141122}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2587,6 +2587,7 @@ MonoBehaviour:
   attackHitBox: {fileID: 823867054}
   pivot: {fileID: 413444204}
   waterZone: {fileID: 1616053564}
+  capsuleCollider: {fileID: 1186500946}
   movementSpeed: 5
   jumpForce: 5
   dashCooldown: 2
@@ -2595,6 +2596,7 @@ MonoBehaviour:
   punchDamage: 1
   punchCooldown: 1
   diveFadeTime: 1
+  isFlip: 0
   maxO2: 100
   nbBiscuits: 4
   OnO2ValueChange:
@@ -2642,43 +2644,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &1029141122
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1029141117}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.1618494}
-  m_Size: {x: 0.57, y: 1.1084697}
-  m_Direction: 0
 --- !u!1 &1075563669
 GameObject:
   m_ObjectHideFlags: 0
@@ -3097,6 +3062,75 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
   m_PrefabInstance: {fileID: 1167195919}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1186500944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1186500945}
+  - component: {fileID: 1186500946}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1186500945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186500944}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 413444204}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!70 &1186500946
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186500944}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.57, y: 1.1084697}
+  m_Direction: 0
 --- !u!4 &1208769078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6fcce10f02aa95f48a81b6d380832fae, type: 3}
@@ -4030,6 +4064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterZone
   waterTopY: 0
+  player: {fileID: 1029141120}
 --- !u!1001 &1623730076
 PrefabInstance:
   m_ObjectHideFlags: 0
