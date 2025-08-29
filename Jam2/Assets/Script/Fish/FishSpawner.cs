@@ -42,7 +42,7 @@ public class FishSpawner : MonoBehaviour
             }
         }
     }
-    private void OnFishDeath()
+    private void OnFishDeath(FishSpecies fishSpecies)
     {
         currentFishCount--;
     }

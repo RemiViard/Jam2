@@ -52,6 +52,7 @@ MonoBehaviour:
   MaxTimeBeforeChangingDirection: 6
   isAlive: 0
   spriteRenderer: {fileID: 2355804635818986805}
+  detectionRange: 5
   hurtbox: {fileID: 8563725452019928202}
   onDeath:
     m_PersistentCalls:

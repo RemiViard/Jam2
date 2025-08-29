@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,9 +15,19 @@ public class Furnace : MonoBehaviour, IInteractable
 
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
+    public static Furnace instance;
+    List<FishSpecies> waitingFishs = new List<FishSpecies>();
+    public void OnDeadFish(FishSpecies fishSpecies)
+    {
 
+    }
     private void Start()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+
         onInteract.AddListener(OnInteractEvent);
         onBiscuitAdded.AddListener(OnBiscuitAdded);
         onCanInteract.AddListener(OnCanInteract);
