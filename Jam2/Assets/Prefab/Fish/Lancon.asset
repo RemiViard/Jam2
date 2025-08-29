@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9e1fa20be4b4f24c82897cb6f2921e3, type: 3}
-  m_Name: Bream
+  m_Name: Lancon
   m_EditorClassIdentifier: Assembly-CSharp::FishSpecies
   behavior: 0
-  speciesName: Bream
-  fishSprite: {fileID: 21300000, guid: 2bd88987f2739834c8e5d0737bf22fc2, type: 3}
-  Hp: 1
-  speed: 2
-  hurtBox: {x: 0, y: 0, z: 0.7, w: 0.3}
-  scale: 0.2
-  fishBiscuit: {fileID: 21300000, guid: f3dbdf10dfc22ab44817babc023b9ec9, type: 3}
+  speciesName: Lancon
+  fishSprite: {fileID: 21300000, guid: be6e675787881644dbfe88256653bc78, type: 3}
+  Hp: 2
+  speed: 6
+  hurtBox: {x: 0, y: 0, z: 3, w: 0.3}
+  scale: 0.25
+  fishBiscuit: {fileID: 21300000, guid: 60f8903d4cd238a46a375f736b60f3a7, type: 3}

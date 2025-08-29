@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ceaaa04e911c75428dc1cb49556275c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
-  species: {fileID: 0}
+  species: {fileID: 11400000, guid: d09c7106a162b3246b594003f615be81, type: 2}
   MinTimeBeforeChangingDirection: 3
   MaxTimeBeforeChangingDirection: 6
   isAlive: 0
