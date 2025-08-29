@@ -13,6 +13,11 @@ public class Furnace : MonoBehaviour, IInteractable
     [SerializeField] Transform HUDPos;
     [SerializeField] Transform TargetPos;
 
+    [Header("Audio")]
+    AudioSource audioSource;
+    [SerializeField] AudioClip open;
+    [SerializeField] AudioClip close;
+
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
     public static Furnace instance;
@@ -28,6 +33,8 @@ public class Furnace : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         if (instance == null)
             instance = this;
         else
@@ -67,11 +74,13 @@ public class Furnace : MonoBehaviour, IInteractable
     }
     private void OnCanInteract()
     {
-
+        audioSource.clip = open;
+        audioSource.Play();
     }
     private void OnStopInteract()
     {
-
+        audioSource.clip = close;
+        audioSource.Play();
     }
     private void OnBiscuitAdded(FishSpecies fish)
     {
