@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resp_Lvl3
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 0
-  cost: 999
-  value: 999
-  m_name: wip
-  m_description: not designed yet
+  cost: 30
+  value: 20
+  m_name: Max Oxygen
+  m_description: Allow you to go deeper. You have +20 maximum oxygen.

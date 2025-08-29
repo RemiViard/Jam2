@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Speed_Lvl2
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 2
-  cost: 8
+  cost: 18
   value: 5
   m_name: Faster ?
-  m_description: You swim faster. + 5% speed.
+  m_description: You swim faster. + 5 speed.

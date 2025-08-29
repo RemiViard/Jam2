@@ -6,13 +6,11 @@ using UnityEngine.UI;
 public class UI_Shop : MonoBehaviour
 {
     [SerializeField] Player player;
-    public UnityEvent onBuy;
     public UnityEvent onNotBuy;
     [SerializeField] List<GameObject> list = new List<GameObject>();
 
     private void Start()
     {
-        onBuy?.AddListener(OnBuy);
         onNotBuy?.AddListener(NotEnoughBiscuits);
     }
     public void TryToBuy(int i)
@@ -21,7 +19,7 @@ public class UI_Shop : MonoBehaviour
 
         if (player.nbBiscuits >= _dataUpgrade.cost)
         {
-            onBuy?.Invoke();
+            OnBuy(_dataUpgrade);
             player.nbBiscuits -= _dataUpgrade.cost;
             list[i].GetComponent<Button>().enabled = false;
         }
@@ -30,13 +28,13 @@ public class UI_Shop : MonoBehaviour
             onNotBuy?.Invoke();
         }
     }
-    void OnBuy()
+    void OnBuy(Upgrade upgrade)
     {
-        Debug.Log("buy");
+        upgrade.Action(player);
     }
 
     void NotEnoughBiscuits()
     {
-        Debug.Log("not buy");
+
     }
 }

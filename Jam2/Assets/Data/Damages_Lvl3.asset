@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Damages_Lvl3
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 1
-  cost: 999
-  value: 999
-  m_name: wip
-  m_description: not designed yet
+  cost: 21
+  value: 3
+  m_name: Boom
+  m_description: You deal +3 more damages when punching.

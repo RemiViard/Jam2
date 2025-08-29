@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f246fc11fe1531f48957eb2b720b60a9, type: 3}
   m_Name: Damages_Lvl1
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
-  stat: 0
+  stat: 1
   cost: 6
-  value: 5
+  value: 1
   m_name: Better punch
-  m_description: You deal +5 damages when you punch.
+  m_description: You deal +1 more damage when you punch.
