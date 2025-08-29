@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,6 +15,8 @@ public class Furnace : MonoBehaviour, IInteractable
 
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
+
+    public List<Fish> _fishesToSell = new List<Fish>();
 
     private void Start()
     {
@@ -31,19 +34,22 @@ public class Furnace : MonoBehaviour, IInteractable
         onInteract.Invoke();
 
         int nbBiscuits = player.nbBiscuits;
-        StartCoroutine(WaitAndGainCookie(nbBiscuits));
-    }
-    IEnumerator WaitAndGainCookie(int nb)
-    {
-        for (int i = 0; i <= nb; i++)
+
+        foreach (Fish fish in _fishesToSell)
         {
-            onBiscuitAdded?.Invoke();
-            yield return new WaitForSeconds(1.0f);
+            //Sell
+            StartCoroutine(WaitAndGainCookie(fish)); // change : sell only one biscuit,give fishspecies 
         }
+
+        // empty stockage
+    }
+    IEnumerator WaitAndGainCookie(Fish fish)
+    {
+        onBiscuitAdded?.Invoke();
+        yield return new WaitForSeconds(1.0f);
     }
     private void OnInteractEvent()
     {
-
     }
     private void OnCanInteract()
     {
