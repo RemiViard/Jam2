@@ -2023,9 +2023,9 @@ GameObject:
   - component: {fileID: 823867052}
   - component: {fileID: 823867053}
   - component: {fileID: 823867054}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HitBox
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2052,7 +2052,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823867051}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -2103,6 +2103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288501bcf8c08d94ea40ade1ea884f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  box: {fileID: 823867053}
+  attacker: {fileID: 1029141120}
 --- !u!1 &859189680
 GameObject:
   m_ObjectHideFlags: 0
@@ -4445,6 +4447,7 @@ Transform:
   m_Children:
   - {fileID: 15798799}
   - {fileID: 1167195920}
+  - {fileID: 2146197533}
   m_Father: {fileID: 488429897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1878648629
@@ -4969,6 +4972,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 88e049f47008cfb4d8bd7b069e41661f, type: 3}
   m_PrefabInstance: {fileID: 2142759718}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2146197532
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1868458442}
+    m_Modifications:
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 29.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4003834388057199823, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: fishSpecies
+      value: 
+      objectReference: {fileID: 11400000, guid: d09c7106a162b3246b594003f615be81, type: 2}
+    - target: {fileID: 4253480880977663497, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+      propertyPath: m_Name
+      value: FishSpawner (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+--- !u!4 &2146197533 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1113767289613280600, guid: 20b230f1651bc23449c2fb95c5421bd4, type: 3}
+  m_PrefabInstance: {fileID: 2146197532}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6626205039805909048
 PrefabInstance:

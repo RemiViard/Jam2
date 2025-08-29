@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WaterZone : MonoBehaviour
 {
-    public float waterTopY; // Y coordinate of the water surface
+    [HideInInspector] public float waterTopY; // Y coordinate of the water surface
     private void Start()
     {
         waterTopY = transform.position.y + (GetComponent<BoxCollider2D>().size.y * transform.localScale.y) / 2;

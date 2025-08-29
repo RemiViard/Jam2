@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3292586257516842324}
   - component: {fileID: 8240209280097417862}
   - component: {fileID: 3441769659467274042}
-  - component: {fileID: 7828175891419821206}
+  - component: {fileID: 8871983923943939791}
   m_Layer: 0
   m_Name: Fish_Prefab
   m_TagString: Untagged
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c49ff4450746c498fa9771f2cfc408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMvtBehavior
---- !u!50 &7828175891419821206
+--- !u!50 &8871983923943939791
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -107,10 +107,9 @@ GameObject:
   - component: {fileID: 1583909506932189294}
   - component: {fileID: 8223881828595917589}
   - component: {fileID: 8563725452019928202}
-  - component: {fileID: 280832624499591969}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HurtBox
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,33 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hurtbox
   boxCollider: {fileID: 8223881828595917589}
---- !u!50 &280832624499591969
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3098975732628297374}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!1 &4108776496009828658
 GameObject:
   m_ObjectHideFlags: 0

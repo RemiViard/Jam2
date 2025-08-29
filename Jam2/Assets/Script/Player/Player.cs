@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHurtable, ICanHit
 {
     [Header("Reference")]
     [SerializeField] InputActionAsset actions;
@@ -102,7 +103,7 @@ public class Player : MonoBehaviour
                 }
                 OnLand = CheckGround();
                 animator.SetBool("isGrounded", OnLand);
-                if(OnLand && rb.linearVelocityX != 0)
+                if (OnLand && rb.linearVelocityX != 0)
                     rb.linearVelocityX = 0;
                 break;
             case PlayerState.InWater:
@@ -167,7 +168,7 @@ public class Player : MonoBehaviour
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
-        if (PunchCooldownTimer <= 0)
+        if (PunchCooldownTimer <= 0 && (OnLand || state == PlayerState.InWater))
         {
             animator.SetTrigger("Punch");
             animator.SetBool("OnAction", true);
@@ -185,7 +186,6 @@ public class Player : MonoBehaviour
 
                     rb.linearVelocityY = 0;
                     rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                    animator.SetTrigger("Jump");
                 }
                 break;
             case PlayerState.InWater:
@@ -208,7 +208,6 @@ public class Player : MonoBehaviour
 
         foreach (RaycastHit2D h in hit)
         {
-            Debug.Log("Hit " + h.collider.gameObject.name);
             if (h.collider.gameObject.CompareTag("Ground"))
             {
                 return true;
@@ -219,20 +218,18 @@ public class Player : MonoBehaviour
     }
     public void Attack()
     {
-        RaycastHit2D[] hits = attackHitBox.ActivateHitBox();
-        if (hits.Length > 0)
-            foreach (RaycastHit2D hit in hits)
+        Debug.Log("Attack");
+        attackHitBox.ActivateHitBox();
+    }
+    public void OnTouch(List<Collider2D> hits)
+    {
+        foreach (Collider2D hit in hits)
+        {
+            if (TryGetComponent<Hurtbox>(out Hurtbox hurtbox))
             {
-                Debug.Log("Hit " + hit.collider.gameObject.name);
-                //if (hit.collider.gameObject.CompareTag("Fish"))
-                //{
-                //    Fish fish = hit.collider.GetComponent<Fish>();
-                //    if (fish != null)
-                //    {
-                //        fish.species.Hp -= punchDamage;
-                //    }
-                //}
+                hurtbox.Hit(punchDamage);
             }
+        }
     }
     public void EndAction()
     {
@@ -283,5 +280,10 @@ public class Player : MonoBehaviour
         OnDeath.Invoke();
         transform.position = spawnPoint.position;
         O2Change(maxO2);
+    }
+
+    public void OnHit(int damage)
+    {
+        O2Change(O2 - damage);
     }
 }
