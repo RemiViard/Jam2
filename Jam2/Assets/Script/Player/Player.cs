@@ -60,6 +60,22 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [Header("UI")]
     [SerializeField] TextMeshProUGUI TextCountBiscuits;
 
+    [Header("Audio Setup")]
+    AudioSource audiosource;
+
+    [Header("Sounds")]
+    [SerializeField] AudioClip SplashSound;
+    [SerializeField] AudioClip SwimSound;
+    public float minimumSwimTime = 0.8f;
+    public float maximumSwimTime = 1.2f;
+    private float SwimTimer = 0;
+
+    [Header("Ambients")]
+    [SerializeField] AudioClip Ambient1;
+    [SerializeField] AudioClip Ambient2;
+    [SerializeField] AudioClip Ambient3;
+    [SerializeField] AudioClip Ambient4;
+
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
     {
@@ -71,6 +87,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audiosource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
         moveAction = actions.FindAction("Move");
         actions.FindAction("Attack").performed += OnAttack;
@@ -130,6 +147,13 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     if (movementInput.y > 0 && transform.position.y >= waterZone.waterTopY - 0.1f)
                     {
                         movementInput.y = 0;
+                    }
+                    SwimTimer += Time.deltaTime;
+                    if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
+                    {
+                        audiosource.clip = SwimSound;
+                        audiosource.Play();
+                        SwimTimer = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
                     //Rotate Logic
@@ -280,6 +304,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     #region WaterZone
     public void EnterWater()
     {
+        SwimTimer = 0;
         state = PlayerState.InWater;
         diveForceInitial = new Vector2(movementInput.x * movementSpeed, rb.linearVelocityY);
         diveForce = diveForceInitial;
@@ -287,9 +312,12 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         animator.SetBool("isSwimming", true);
+        audiosource.clip = SplashSound;
+        audiosource.Play();
     }
     public void ExitWater()
     {
+        SwimTimer = 0;
         state = PlayerState.OnLand;
         rb.gravityScale = baseGravityScale;
         //isDashing
