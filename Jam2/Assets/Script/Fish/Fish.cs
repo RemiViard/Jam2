@@ -57,7 +57,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     {
         m_Rigidbody.linearVelocity = transform.forward * species.speed;
     }
-    public void OnHit(int damage)
+    public void OnHurt(int damage)
     {
         Hp -= damage;
         if (Hp <= 0)

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider2D))]
 public class Hitbox : MonoBehaviour
 {
     [SerializeField] BoxCollider2D box;
-    [SerializeField] Player attacker;
+    public UnityEvent<List<Collider2D>> OnTouch = new UnityEvent<List<Collider2D>>();
     List<Collider2D> hits = new List<Collider2D>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,7 +20,7 @@ public class Hitbox : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
         if (hits.Count > 0)
-            attacker.OnTouch(hits);
+            OnTouch.Invoke(hits);
             DeactivateHitBox();
     }
     public void ActivateHitBox()

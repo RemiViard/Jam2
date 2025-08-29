@@ -40,7 +40,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     float diveFadeTimer = 0;
 
     Rigidbody2D rb;
-    bool currentDirection = false;
+    Vector2 currentDirection = Vector2.zero;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
     float baseGravityScale;
@@ -78,13 +78,13 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
 
-        if (Mathf.Abs(movementInput.x) > 0)
+        if (movementInput != Vector2.zero)
         {
-            bool newDirection = movementInput.x < 0;
-            if (newDirection != currentDirection)
+            if (movementInput != currentDirection)
             {
-                currentDirection = newDirection;
-                pivot.localRotation = Quaternion.Euler(0, currentDirection ? -90 : 90, 0);
+                currentDirection = movementInput;
+                pivot.LookAt(transform.position + new Vector3(currentDirection.x, currentDirection.y, 0));
+                pivot.localRotation = Quaternion.Euler(0, currentDirection.x < 0 ? -90 : 90, 0);
             }
         }
         switch (state)
@@ -105,6 +105,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 animator.SetBool("isGrounded", OnLand);
                 if (OnLand && rb.linearVelocityX != 0)
                     rb.linearVelocityX = 0;
+
                 break;
             case PlayerState.InWater:
                 //Swimming Logic
@@ -193,7 +194,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 {
                     dashCooldownTimer = dashCooldown;
                     dashReleaseTimer = dashDuration;
-                    Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(currentDirection ? -1 : 1, 0);
+                    Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(currentDirection.x < 0 ? -1 : 1, 0);
                     dashForceInitial = direction * dashSpeed;
                 }
                 break;
@@ -223,9 +224,10 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     }
     public void OnTouch(List<Collider2D> hits)
     {
+        Debug.Log("Hit " + hits.Count + " targets");
         foreach (Collider2D hit in hits)
         {
-            if (TryGetComponent<Hurtbox>(out Hurtbox hurtbox))
+            if (hit.TryGetComponent<Hurtbox>(out Hurtbox hurtbox))
             {
                 hurtbox.Hit(punchDamage);
             }
@@ -282,7 +284,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         O2Change(maxO2);
     }
 
-    public void OnHit(int damage)
+    public void OnHurt(int damage)
     {
         O2Change(O2 - damage);
     }
