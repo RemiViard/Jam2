@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class Hurtbox : MonoBehaviour
 {
-    [SerializeField] BoxCollider2D boxCollider;
+    public BoxCollider2D boxCollider;
     public UnityEvent <int> OnHurt;
     [SerializeField] List<SpriteRenderer> spriteRenderers;
     Color baseColor;
@@ -42,5 +42,9 @@ public class Hurtbox : MonoBehaviour
         {
             spriteRenderer.color = hitColor;
         }
+    }
+    public void DesactivateHurtbox()
+    {
+               boxCollider.enabled = false;
     }
 }

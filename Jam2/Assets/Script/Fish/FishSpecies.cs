@@ -6,6 +6,7 @@ public class FishSpecies : ScriptableObject
     public enum FishBehavior
     {
         Fleeing,
+        Neutral,
         Aggressive,
     }
     public FishBehavior behavior;
