@@ -15,6 +15,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] Transform pivot;
     [SerializeField] WaterZone waterZone;
     [SerializeField] CapsuleCollider2D capsuleCollider;
+    [SerializeField] Camera mainCamera;
+
     [Header("Stats")]
     [SerializeField] int movementSpeed;
     [SerializeField] int jumpForce;
@@ -115,21 +117,24 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                         movementInput.y = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
-                    if (movementInput.x != 0)
+                    //Rotate Logic
+                    if (!animator.GetBool("OnAction"))
                     {
-                        pivot.transform.LookAt(pivot.position + new Vector3(movementInput.x, movementInput.y));
-                        pivot.transform.Rotate(Vector3.right * 90);
-                        if (movementInput.x < 0 != isFlip)
-                            isFlip = !isFlip;
-                    }
-                    else
-                    {
-                        Debug.Log(isFlip + "  " + (movementInput.y < 0));
-                        int rotationy = isFlip ? -90 : 90;
-                        if (movementInput.y < 0)
-                            pivot.transform.localRotation = Quaternion.Euler(180, rotationy, 0);
+                        if (movementInput.x != 0)
+                        {
+                            pivot.transform.LookAt(pivot.position + new Vector3(movementInput.x, movementInput.y));
+                            pivot.transform.Rotate(Vector3.right * 90);
+                            if (movementInput.x < 0 != isFlip)
+                                isFlip = !isFlip;
+                        }
                         else
-                            pivot.transform.localRotation = Quaternion.Euler(0, rotationy, 0);
+                        {
+                            int rotationy = isFlip ? -90 : 90;
+                            if (movementInput.y < 0)
+                                pivot.transform.localRotation = Quaternion.Euler(180, rotationy, 0);
+                            else
+                                pivot.transform.localRotation = Quaternion.Euler(0, rotationy, 0);
+                        }
                     }
                 }
                 //Dash Logic
@@ -184,8 +189,15 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
-        if (PunchCooldownTimer <= 0 && (OnLand || state == PlayerState.InWater))
+        if (PunchCooldownTimer <= 0 && (state == PlayerState.InWater))
         {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, -Camera.main.transform.position.z));
+            if(mouseWorldPos.x == pivot.position.x)
+            {
+                mouseWorldPos.x = pivot.position.x+0.01f;
+            }
+            pivot.LookAt(mouseWorldPos, Vector3.up);
             animator.SetTrigger("Punch");
             animator.SetBool("OnAction", true);
             PunchCooldownTimer = punchCooldown;
@@ -234,12 +246,10 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     }
     public void Attack()
     {
-        Debug.Log("Attack");
         attackHitBox.ActivateHitBox();
     }
     public void OnTouch(List<Collider2D> hits)
     {
-        Debug.Log("Hit " + hits.Count + " targets");
         foreach (Collider2D hit in hits)
         {
             if (hit.TryGetComponent<Hurtbox>(out Hurtbox hurtbox))

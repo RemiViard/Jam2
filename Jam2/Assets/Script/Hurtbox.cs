@@ -37,7 +37,6 @@ public class Hurtbox : MonoBehaviour
     }
     public void Hit(int damage)
     {
-        Debug.Log("Hurtbox Hit");
         OnHurt.Invoke(damage);
         foreach (var spriteRenderer in spriteRenderers)
         {
