@@ -6,6 +6,7 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] GameObject fishPrefab;
     [SerializeField] int numberOfFish = 10;
     [SerializeField] Vector2 spawnAreaSize = new Vector2(10f, 10f);
+    [SerializeField] BoxCollider2D deptZone;
     [SerializeField] float spawnCooldown;
     int currentFishCount = 0;
     float timer;
@@ -36,6 +37,7 @@ public class FishSpawner : MonoBehaviour
                 GameObject fishObject = Instantiate(fishPrefab, spawnPosition, Quaternion.LookRotation(Vector3.right), transform);
                 Fish fish = fishObject.GetComponent<Fish>();
                 fish.species = fishSpecies;
+                fish.deptZone = deptZone;
                 fish.Spawn();
                 currentFishCount++;
                 fishObject.GetComponent<Fish>().onDeath.AddListener(OnFishDeath);

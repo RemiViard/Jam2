@@ -22,6 +22,8 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] float rotDuration;
     BehaviorState state = BehaviorState.Neutral;
     Vector3 currentDir = Vector3.zero;
+    float zigzagTimer = 0f;
+    public BoxCollider2D deptZone;
     public enum FishBehavior
     {
         Fleeing,
@@ -59,25 +61,49 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
             switch (state)
             {
                 case BehaviorState.Fleeing:
-                    Vector3 dir = (transform.position - Player.playerTransform.position).normalized;
-                    transform.LookAt(transform.position + dir);
-                    transform.position += dir * species.speed * Time.deltaTime;
-                    if (Vector3.Distance(transform.position, Player.playerTransform.position) >= detectionRange)
+                    Move(species.speed);
+                    float distanceToPlayer = Vector3.Distance(transform.position, Player.playerTransform.position);
+                    if (distanceToPlayer >= detectionRange * 3)
                     {
                         state = BehaviorState.Neutral;
+                        zigzagTimer = 0f;
                     }
-                        break;
+                    else if (distanceToPlayer <= detectionRange*0.5f && zigzagTimer <= 0)
+                    {
+                        Vector2 dir = currentDir;
+                        currentDir = (transform.position - Player.playerTransform.position).normalized;
+                        if (!CheckBound())
+                            currentDir = dir;
+                        else
+                        {
+                            transform.LookAt(transform.position + currentDir);
+                            zigzagTimer = 1f;
+                        }
+                    }
+                    if (zigzagTimer > 0)
+                    {
+                        zigzagTimer -= Time.deltaTime;
+                        if (zigzagTimer <= 0)
+                            zigzagTimer = 0;
+                    }
+                        
+                    break;
                 case BehaviorState.Neutral:
                     switch (species.behavior)
                     {
                         case FishBehavior.Fleeing:
-                            if(Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
+                            if (Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
                             {
+                                ChangeDirection(transform.position - Player.playerTransform.position);
                                 state = BehaviorState.Fleeing;
                             }
                             break;
                         case FishBehavior.Neutral:
-                            rb.linearVelocity = transform.forward * species.speed / 2 * Time.deltaTime;
+                            if (currentDir != Vector3.zero)
+                                transform.LookAt(transform.position + currentDir);
+                            else
+                                ChangeDirection();
+                            Move(species.speed / 2);
                             break;
                         case FishBehavior.Aggressive:
                             if (Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
@@ -88,7 +114,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                     }
                     break;
                 case BehaviorState.Attacking:
-                    
+
                 default:
                     break;
             }
@@ -103,14 +129,34 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                 onDeath.RemoveAllListeners();
                 Destroy(gameObject);
             }
-
         }
     }
     private void ChangeDirection()
     {
-        Vector2 rot = Random.insideUnitCircle.normalized;
-        transform.LookAt(transform.position + new Vector3(rot.x, rot.y, 0));
+        currentDir = Random.insideUnitCircle.normalized;
+        transform.LookAt(transform.position + currentDir);
     }
+    private void ChangeDirection(Vector2 dir)
+    {
+        currentDir = dir.normalized;
+        transform.LookAt(transform.position + currentDir);
+    }
+    void Move(float speed)
+    {
+        if (!CheckBound())
+        {
+            currentDir = -currentDir;
+            transform.LookAt(transform.position + currentDir);
+        } 
+        transform.position += currentDir * speed * Time.deltaTime;
+    }
+    bool CheckBound()
+    {
+        if (currentDir == null)
+            ChangeDirection();
+        return deptZone.bounds.Contains(transform.position + currentDir * Time.deltaTime);
+    }
+
     public void OnHurt(int damage)
     {
         Hp -= damage;
