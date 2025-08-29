@@ -5,19 +5,17 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Hitbox : MonoBehaviour
 {
-    Collider2D collider2D;
-    List<GameObject> touch = new List<GameObject>();
+    BoxCollider2D box;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GetComponent<Collider2D>();
+        
+        box = GetComponent<BoxCollider2D>();
     }
-    public void OnTriggerEnter2D(Collider2D collision)
+    public RaycastHit2D[] ActivateHitBox()
     {
-        if (!touch.Contains(collision.gameObject))
-        {
-            touch.Add(collision.gameObject);
-        }
-    }
+        Debug.Log("Hitbox Activated");
+        return Physics2D.BoxCastAll(box.bounds.center, box.bounds.size, 0f, Vector2.zero, 800f, gameObject.layer);
 
+    }
 }

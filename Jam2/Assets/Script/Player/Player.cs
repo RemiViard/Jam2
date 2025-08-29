@@ -10,9 +10,9 @@ public class Player : MonoBehaviour
     [SerializeField] InputActionAsset actions;
     [SerializeField] Animator animator;
     [SerializeField] Transform spawnPoint;
-    [SerializeField] BoxCollider2D attackHitBox;
+    [SerializeField] Hitbox attackHitBox;
     [SerializeField] Transform pivot;
-
+    [SerializeField] WaterZone waterZone;
     [Header("Stats")]
     [SerializeField] int movementSpeed;
     [SerializeField] int jumpForce;
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     Vector2 diveForceInitial = new Vector2(0, 0);
     Vector2 diveForce = new Vector2(0, 0);
     float diveFadeTimer = 0;
-   
+
     Rigidbody2D rb;
     bool currentDirection = false;
     Vector2 movementInput = new Vector2();
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
     public UnityEvent OnDeath = new UnityEvent(); // v2 :event pour la mort du joueur
-
+    bool OnLand = true;
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
     {
@@ -100,14 +100,20 @@ public class Player : MonoBehaviour
                     if (animator.GetBool("isWalking"))
                         animator.SetBool("isWalking", false);
                 }
+                OnLand = CheckGround();
+                animator.SetBool("isGrounded", OnLand);
+                if(OnLand && rb.linearVelocityX != 0)
+                    rb.linearVelocityX = 0;
                 break;
             case PlayerState.InWater:
                 //Swimming Logic
                 if (movementInput != Vector2.zero && dashReleaseTimer == 0)
                 {
+                    if (movementInput.y > 0 && transform.position.y >= waterZone.waterTopY - 0.1f)
+                    {
+                        movementInput.y = 0;
+                    }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
-                    if (!animator.GetBool("isSwimming"))
-                        animator.SetBool("isSwimming", true);
                 }
                 //Dash Logic
                 else if (dashReleaseTimer > 0)
@@ -121,11 +127,6 @@ public class Player : MonoBehaviour
                         dashForce = Vector2.zero;
                         dashForceInitial = Vector2.zero;
                     }
-                }
-                else
-                {
-                    if (animator.GetBool("isSwimming"))
-                        animator.SetBool("isSwimming", false);
                 }
                 //Diving Logic
                 if (diveFadeTimer > 0)
@@ -169,10 +170,11 @@ public class Player : MonoBehaviour
         if (PunchCooldownTimer <= 0)
         {
             animator.SetTrigger("Punch");
+            animator.SetBool("OnAction", true);
             PunchCooldownTimer = punchCooldown;
         }
     }
-    
+
     void OnDash(InputAction.CallbackContext callbackContext)
     {
         switch (state)
@@ -200,12 +202,13 @@ public class Player : MonoBehaviour
     #endregion
     bool CheckGround()
     {
-        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y / 2;
+        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y / 3;
 
         RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position + Vector3.down * _distanceToTheGround, Vector3.down, +0.3f);
 
         foreach (RaycastHit2D h in hit)
         {
+            Debug.Log("Hit " + h.collider.gameObject.name);
             if (h.collider.gameObject.CompareTag("Ground"))
             {
                 return true;
@@ -214,10 +217,26 @@ public class Player : MonoBehaviour
         return false;
 
     }
-    void ActivateHitbox(bool value)
+    public void Attack()
     {
-        attackHitBox.enabled = value;
-
+        RaycastHit2D[] hits = attackHitBox.ActivateHitBox();
+        if (hits.Length > 0)
+            foreach (RaycastHit2D hit in hits)
+            {
+                Debug.Log("Hit " + hit.collider.gameObject.name);
+                //if (hit.collider.gameObject.CompareTag("Fish"))
+                //{
+                //    Fish fish = hit.collider.GetComponent<Fish>();
+                //    if (fish != null)
+                //    {
+                //        fish.species.Hp -= punchDamage;
+                //    }
+                //}
+            }
+    }
+    public void EndAction()
+    {
+        animator.SetBool("OnAction", false);
     }
     #region WaterZone
     public void EnterWater()
@@ -226,16 +245,22 @@ public class Player : MonoBehaviour
         diveForceInitial = new Vector2(movementInput.x * movementSpeed, rb.linearVelocityY);
         diveForce = diveForceInitial;
         diveFadeTimer = diveFadeTime;
-        Debug.Log(rb.linearVelocity);
         rb.linearVelocity = Vector2.zero;
-        
         rb.gravityScale = 0f;
+        animator.SetBool("isSwimming", true);
     }
     public void ExitWater()
     {
         state = PlayerState.OnLand;
         rb.gravityScale = baseGravityScale;
-        
+        //isDashing
+        if (dashReleaseTimer > 0)
+        {
+            rb.linearVelocity = new Vector2(movementInput.x, movementInput.y) * movementSpeed;
+            rb.linearVelocity += dashForce;
+            dashReleaseTimer = 0;
+        }
+        animator.SetBool("isSwimming", false);
         O2Change(maxO2);
     }
     #endregion
@@ -243,7 +268,7 @@ public class Player : MonoBehaviour
     {
         O2 = value;
         OnO2ValueChange.Invoke(O2 / maxO2);
-        if(O2 <= 0)
+        if (O2 <= 0)
         {
             O2 = 0;
             Die();
