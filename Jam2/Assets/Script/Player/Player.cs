@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] Hitbox attackHitBox;
     [SerializeField] Transform pivot;
     [SerializeField] WaterZone waterZone;
+    [SerializeField] CapsuleCollider2D capsuleCollider;
     [Header("Stats")]
     [SerializeField] int movementSpeed;
     [SerializeField] int jumpForce;
@@ -40,7 +41,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     float diveFadeTimer = 0;
 
     Rigidbody2D rb;
-    Vector2 currentDirection = Vector2.zero;
+    public bool isFlip = false;
+    Vector3 lastDirection = Vector3.zero;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
     float baseGravityScale;
@@ -77,24 +79,20 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
 
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
-
-        if (movementInput != Vector2.zero)
-        {
-            if (movementInput != currentDirection)
-            {
-                currentDirection = movementInput;
-                pivot.LookAt(transform.position + new Vector3(currentDirection.x, currentDirection.y, 0));
-                pivot.localRotation = Quaternion.Euler(0, currentDirection.x < 0 ? -90 : 90, 0);
-            }
-        }
         switch (state)
         {
             case PlayerState.OnLand:
-                if (movementInput != Vector2.zero)
+                if (movementInput.x != 0)
                 {
                     transform.Translate(new Vector3(movementInput.x, 0, 0) * Time.deltaTime * movementSpeed);
                     if (!animator.GetBool("isWalking"))
                         animator.SetBool("isWalking", true);
+                    if (movementInput.x < 0 != isFlip)
+                    {
+                        isFlip = !isFlip;
+                        pivot.localRotation = Quaternion.Euler(0, isFlip ? -90 : 90, 0);
+                    }
+
                 }
                 else
                 {
@@ -106,6 +104,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 if (OnLand && rb.linearVelocityX != 0)
                     rb.linearVelocityX = 0;
 
+
                 break;
             case PlayerState.InWater:
                 //Swimming Logic
@@ -116,6 +115,22 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                         movementInput.y = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                    if (movementInput.x != 0)
+                    {
+                        pivot.transform.LookAt(pivot.position + new Vector3(movementInput.x, movementInput.y));
+                        pivot.transform.Rotate(Vector3.right * 90);
+                        if (movementInput.x < 0 != isFlip)
+                            isFlip = !isFlip;
+                    }
+                    else
+                    {
+                        Debug.Log(isFlip + "  " + (movementInput.y < 0));
+                        int rotationy = isFlip ? -90 : 90;
+                        if (movementInput.y < 0)
+                            pivot.transform.localRotation = Quaternion.Euler(180, rotationy, 0);
+                        else
+                            pivot.transform.localRotation = Quaternion.Euler(0, rotationy, 0);
+                    }
                 }
                 //Dash Logic
                 else if (dashReleaseTimer > 0)
@@ -194,7 +209,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 {
                     dashCooldownTimer = dashCooldown;
                     dashReleaseTimer = dashDuration;
-                    Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(currentDirection.x < 0 ? -1 : 1, 0);
+                    Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(isFlip ? -1 : 1, 0);
                     dashForceInitial = direction * dashSpeed;
                 }
                 break;
@@ -203,7 +218,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     #endregion
     bool CheckGround()
     {
-        float _distanceToTheGround = GetComponent<CapsuleCollider2D>().size.y / 3;
+        float _distanceToTheGround = capsuleCollider.size.y / 3;
 
         RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position + Vector3.down * _distanceToTheGround, Vector3.down, +0.3f);
 
@@ -258,6 +273,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             rb.linearVelocity = new Vector2(movementInput.x, movementInput.y) * movementSpeed;
             rb.linearVelocity += dashForce;
             dashReleaseTimer = 0;
+            pivot.localRotation = Quaternion.Euler(0, isFlip ? -90 : 90, 0);
         }
         animator.SetBool("isSwimming", false);
         O2Change(maxO2);
