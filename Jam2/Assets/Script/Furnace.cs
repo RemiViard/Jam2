@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Furnace : MonoBehaviour, IInteractable
 {
     public UnityEvent onInteract;
-    public UnityEvent onBiscuitAdded;
     [SerializeField] GameObject prefabBiscuit;
 
     [SerializeField] Transform HUDPos;
@@ -16,11 +16,16 @@ public class Furnace : MonoBehaviour, IInteractable
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
     public static Furnace instance;
-    List<FishSpecies> waitingFishs = new List<FishSpecies>();
+    public List<FishSpecies> waitingFishs = new List<FishSpecies>();
     public void OnDeadFish(FishSpecies fishSpecies)
     {
-
+        waitingFishs.Add(fishSpecies);
     }
+    public void ResetWaitingFishes()
+    {
+        waitingFishs.Clear();
+    }
+
     private void Start()
     {
         if (instance == null)
@@ -29,7 +34,6 @@ public class Furnace : MonoBehaviour, IInteractable
             Destroy(gameObject);
 
         onInteract.AddListener(OnInteractEvent);
-        onBiscuitAdded.AddListener(OnBiscuitAdded);
         onCanInteract.AddListener(OnCanInteract);
         onStopInteract.AddListener(OnStopInteract);
     }
@@ -40,21 +44,26 @@ public class Furnace : MonoBehaviour, IInteractable
     public void Interact(Player player)
     {
         onInteract.Invoke();
-
-        int nbBiscuits = player.nbBiscuits;
-        StartCoroutine(WaitAndGainCookie(nbBiscuits));
+        StartCoroutine(WaitAndGainCookie(player));
     }
-    IEnumerator WaitAndGainCookie(int nb)
+    IEnumerator WaitAndGainCookie(Player player)
     {
-        for (int i = 0; i <= nb; i++)
+
+        foreach (FishSpecies fish in waitingFishs)
         {
-            onBiscuitAdded?.Invoke();
+            //Sell
+            OnBiscuitAdded(fish);
+
+            player.nbBiscuits += fish.value;
+            player.UpdateUI();
+
             yield return new WaitForSeconds(1.0f);
         }
+        waitingFishs.Clear();
     }
+
     private void OnInteractEvent()
     {
-
     }
     private void OnCanInteract()
     {
@@ -64,8 +73,9 @@ public class Furnace : MonoBehaviour, IInteractable
     {
 
     }
-    private void OnBiscuitAdded()
+    private void OnBiscuitAdded(FishSpecies fish)
     {
+        prefabBiscuit.GetComponent<Image>().sprite = fish.fishBiscuit;
         GameObject go = Instantiate(prefabBiscuit, HUDPos);
         go.transform.localPosition = Vector3.zero;
         StartCoroutine(TryGoToHUD(go));
