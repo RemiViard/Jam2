@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resp_Lvl1
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 0
-  cost: 4
+  cost: 10
   value: 5
   m_name: Tuba+
   m_description: Allow you to go deeper. Maximum Oxygen + 5.

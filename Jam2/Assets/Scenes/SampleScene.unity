@@ -3243,7 +3243,7 @@ MonoBehaviour:
   diveFadeTime: 1
   isFlip: 0
   maxO2: 100
-  nbBiscuits: 0
+  nbBiscuits: 20
   OnO2ValueChange:
     m_PersistentCalls:
       m_Calls:

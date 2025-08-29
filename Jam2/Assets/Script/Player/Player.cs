@@ -19,7 +19,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] Camera mainCamera;
 
     [Header("Stats")]
-    [SerializeField] int movementSpeed;
+    public int movementSpeed;
     [SerializeField] int jumpForce;
 
     [Header("Dash")]
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     float dashReleaseTimer = 0;
 
     [Header("Punch")]
-    [SerializeField] int punchDamage = 1;
+    public int punchDamage = 1;
     [SerializeField] float punchCooldown = 1f;
     float PunchCooldownTimer = 0;
 
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     InputAction moveAction;
     float baseGravityScale;
 
-    [SerializeField] int maxO2 = 10;
+    public int maxO2 = 10;
     float O2;
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
