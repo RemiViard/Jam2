@@ -3,13 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FishSpecies", menuName = "Scriptable Objects/FishSpecies")]
 public class FishSpecies : ScriptableObject
 {
-    public enum FishBehavior
-    {
-        Fleeing,
-        Neutral,
-        Aggressive,
-    }
-    public FishBehavior behavior;
+    public Fish.FishBehavior behavior;
     public string speciesName;
     public Sprite fishSprite;
     public int Hp;

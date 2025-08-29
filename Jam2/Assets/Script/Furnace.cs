@@ -15,11 +15,18 @@ public class Furnace : MonoBehaviour, IInteractable
 
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
-
-    public List<Fish> _fishesToSell = new List<Fish>();
-
+    public static Furnace instance;
+    List<FishSpecies> waitingFishs = new List<FishSpecies>();
+    public void OnDeadFish(FishSpecies fishSpecies)
+    {
+    }
     private void Start()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+
         onInteract.AddListener(OnInteractEvent);
         onBiscuitAdded.AddListener(OnBiscuitAdded);
         onCanInteract.AddListener(OnCanInteract);
@@ -35,7 +42,7 @@ public class Furnace : MonoBehaviour, IInteractable
 
         int nbBiscuits = player.nbBiscuits;
 
-        foreach (Fish fish in _fishesToSell)
+        foreach (FishSpecies fish in waitingFishs)
         {
             //Sell
             StartCoroutine(WaitAndGainCookie(fish)); // change : sell only one biscuit,give fishspecies 
@@ -43,7 +50,7 @@ public class Furnace : MonoBehaviour, IInteractable
 
         // empty stockage
     }
-    IEnumerator WaitAndGainCookie(Fish fish)
+    IEnumerator WaitAndGainCookie(FishSpecies fish)
     {
         onBiscuitAdded?.Invoke();
         yield return new WaitForSeconds(1.0f);

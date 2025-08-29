@@ -61,6 +61,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         OnLand,
         InWater,
     }
+    public static Transform playerTransform = null;// static reference to the player transform for easy access(FishBehavior)
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -73,6 +74,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         O2 = maxO2;
         OnO2ValueChange.Invoke(O2 / maxO2);
         baseGravityScale = rb.gravityScale;
+        if (playerTransform == null)
+            playerTransform = transform;
     }
 
     // Update is called once per frame
