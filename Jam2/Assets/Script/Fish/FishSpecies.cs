@@ -8,6 +8,7 @@ public class FishSpecies : ScriptableObject
     public Sprite fishSprite;
     public int Hp;
     public float speed;
+    public int damage;
     public Vector4 hurtBox;// x, y, width, height
     public float scale;
     public Sprite fishBiscuit;
