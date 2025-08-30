@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,5 +51,22 @@ public class Hurtbox : MonoBehaviour
     public void DesactivateHurtbox()
     {
         boxCollider.enabled = false;
+    }
+    public void PauseGameEffect(float duration)
+    {
+        if (Time.timeScale == 0f)
+            return;
+        StartCoroutine(pauseGameEffect(duration));
+    }
+    IEnumerator pauseGameEffect(float duration)
+    {
+        float timer = 0f;
+        Time.timeScale = 0f;
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        Time.timeScale = 1f;
     }
 }

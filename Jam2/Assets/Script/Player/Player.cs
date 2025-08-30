@@ -417,8 +417,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
 
     public void OnHurt(int damage)
     {
-        Debug.Log("Player Hurt");
         O2Change(O2 - damage);
+        hurtbox.PauseGameEffect(0.1f);
     }
     public void SetActive(bool value)
     {

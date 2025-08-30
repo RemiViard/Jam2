@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 public class OxigenBarUI : MonoBehaviour
@@ -7,12 +8,13 @@ public class OxigenBarUI : MonoBehaviour
     [SerializeField] RectTransform fillTransform;
     [SerializeField] RectMask2D fillMask;
     Image fillImage;
-
+    float ToGoValue;
     [SerializeField] Color panicColor;
     Color baseColor;
 
     bool isInPanic = false;
     float timerPanic = 0f;
+    float speed = 10;
     private void Start()
     {
         fillSpriteSize = fillTransform.rect.height;
@@ -30,10 +32,16 @@ public class OxigenBarUI : MonoBehaviour
                 timerPanic = 0f;
             }
         }
+        if (fillMask.padding.w != ToGoValue)
+        {
+            float multiplicator = ToGoValue - fillMask.padding.w;
+            fillMask.padding = new Vector4(0, 0, 0, fillMask.padding.w + (multiplicator * Time.deltaTime * speed));
+        }
     }
     public void OnValueChange(float value)
     {
-        fillMask.padding = new Vector4(0,0,0, fillSpriteSize - (value * fillSpriteSize));
+        ToGoValue = fillSpriteSize - (value * fillSpriteSize);
+        //fillMask.padding = new Vector4(0,0,0, fillSpriteSize - (value * fillSpriteSize));
         if(value <= 0.3f && !isInPanic)
         {
             isInPanic = true;

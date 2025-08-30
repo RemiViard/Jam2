@@ -57,7 +57,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         onDeath.AddListener(Furnace.instance.OnDeadFish);
         detectionRange = species.detectionRange;
         if (species.scale != 0)
-            transform.localScale = Vector3.one * species.scale;
+            spriteRenderer.transform.localScale = Vector3.one * species.scale;
     }
     void Update()
     {
@@ -199,6 +199,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     public void OnHurt(int damage)
     {
         Hp -= damage;
+        hurtbox.PauseGameEffect(0.1f);
         if (species.behavior == FishBehavior.Neutral)
             state = BehaviorState.Fleeing;
         if (Hp <= 0)
@@ -217,7 +218,6 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         {
             if (hit.TryGetComponent(out Hurtbox hb) && hit.tag == "PlayerHurtbox")
             {
-                Debug.Log("Hit " + hit.gameObject.name + " for " + species.damage + " damage.");
                 hb.Hit(species.damage);
             }
         }
