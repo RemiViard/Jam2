@@ -2191,6 +2191,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ee551c6c6660914e9751b73e0a19484, type: 3}
   m_PrefabInstance: {fileID: 1090268529}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &203852454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 203852455}
+  - component: {fileID: 203852456}
+  m_Layer: 0
+  m_Name: FogPostProcess
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &203852455
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203852454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1806742416}
+  - {fileID: 1741472307}
+  - {fileID: 270749571}
+  - {fileID: 2135819615}
+  m_Father: {fileID: 1116883823}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &203852456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203852454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b57d033612258504aab1afd0d8980d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fog_PostProcess
+  _player: {fileID: 1029141120}
 --- !u!1001 &209668906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2750,7 +2799,6 @@ GameObject:
   - component: {fileID: 270749573}
   - component: {fileID: 270749572}
   - component: {fileID: 270749575}
-  - component: {fileID: 270749574}
   m_Layer: 0
   m_Name: PostProcessUnderwaterDeep
   m_TagString: Untagged
@@ -2771,7 +2819,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1116883823}
+  m_Father: {fileID: 203852455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &270749572
 BoxCollider:
@@ -2811,19 +2859,6 @@ MonoBehaviour:
   blendDistance: 6.33
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 7db289e2cefc78c4bac8800a4f2a201f, type: 2}
---- !u!114 &270749574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 270749570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b57d033612258504aab1afd0d8980d91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fog_PostProcess
-  PostProcessUnderwater: {fileID: 0}
 --- !u!54 &270749575
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9831,7 +9866,7 @@ Transform:
   m_GameObject: {fileID: 1029141117}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4, y: 0.79, z: 0}
+  m_LocalPosition: {x: 4.99, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9913,6 +9948,7 @@ MonoBehaviour:
   Ambient2: {fileID: 0}
   Ambient3: {fileID: 0}
   Ambient4: {fileID: 0}
+  volumeProfile: {fileID: 0}
 --- !u!50 &1029141121
 Rigidbody2D:
   serializedVersion: 5
@@ -10555,13 +10591,10 @@ Transform:
   m_Children:
   - {fileID: 1075563670}
   - {fileID: 1616053559}
-  - {fileID: 1806742416}
-  - {fileID: 1741472307}
-  - {fileID: 270749571}
-  - {fileID: 2135819615}
   - {fileID: 2010231209}
   - {fileID: 1927296844}
   - {fileID: 2106173094}
+  - {fileID: 203852455}
   m_Father: {fileID: 488429897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1121698927
@@ -15670,7 +15703,6 @@ GameObject:
   - component: {fileID: 1741472307}
   - component: {fileID: 1741472306}
   - component: {fileID: 1741472308}
-  - component: {fileID: 1741472309}
   - component: {fileID: 1741472310}
   m_Layer: 0
   m_Name: PostProcessUnderwater
@@ -15693,7 +15725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
   m_IsGlobal: 0
   priority: 1
-  blendDistance: 0
+  blendDistance: 0.5
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 3753ef6875d31cd4bad91ecc8d16eec4, type: 2}
 --- !u!4 &1741472307
@@ -15709,7 +15741,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1116883823}
+  m_Father: {fileID: 203852455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1741472308
 BoxCollider:
@@ -15732,19 +15764,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 172.0953, y: 22.920464, z: 35.756912}
   m_Center: {x: 48.32576, y: 9.728943, z: -17.378456}
---- !u!114 &1741472309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1741472305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b57d033612258504aab1afd0d8980d91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fog_PostProcess
-  PostProcessUnderwater: {fileID: 1741472305}
 --- !u!54 &1741472310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16366,7 +16385,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1116883823}
+  m_Father: {fileID: 203852455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1821720179
 PrefabInstance:
@@ -17869,7 +17888,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2015149537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18872,7 +18891,6 @@ GameObject:
   - component: {fileID: 2135819617}
   - component: {fileID: 2135819616}
   - component: {fileID: 2135819619}
-  - component: {fileID: 2135819618}
   m_Layer: 0
   m_Name: PostProcessUnderwaterVeryDeep
   m_TagString: Untagged
@@ -18893,7 +18911,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1116883823}
+  m_Father: {fileID: 203852455}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2135819616
 BoxCollider:
@@ -18933,19 +18951,6 @@ MonoBehaviour:
   blendDistance: 7.35
   weight: 1
   sharedProfile: {fileID: 11400000, guid: c8721ac8af9baf34bb50aa16386153e3, type: 2}
---- !u!114 &2135819618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135819614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b57d033612258504aab1afd0d8980d91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fog_PostProcess
-  PostProcessUnderwater: {fileID: 0}
 --- !u!54 &2135819619
 Rigidbody:
   m_ObjectHideFlags: 0

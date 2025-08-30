@@ -2,24 +2,25 @@ using UnityEngine;
 
 public class Fog_PostProcess : MonoBehaviour
 {
-    [SerializeField] GameObject PostProcessUnderwater;
-
-    private void OnTriggerEnter(Collider other)
+    [SerializeField] Player _player;
+    float watersurface = -2.66f;
+    float endSurface = -5f;
+    Vector2 fogDensityMinMax = new Vector2(0f, 0.021f);
+    private void Update()
     {
-
-        if (other.TryGetComponent<Camera>(out Camera camera))
+        if (_player.transform.position.y < watersurface)
         {
-            RenderSettings.fog = true;
+            if (!RenderSettings.fog)
+                RenderSettings.fog = true;
+            float t = Mathf.InverseLerp(watersurface, endSurface, _player.transform.position.y);
+            float fogDensity = Mathf.Lerp(fogDensityMinMax.x, fogDensityMinMax.y, t);
+            if(RenderSettings.fogDensity != fogDensity)
+                RenderSettings.fogDensity = fogDensity;
         }
-
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-
-        if (other.TryGetComponent<Camera>(out Camera camera))
+        else
         {
-            RenderSettings.fog = false;
+            if (RenderSettings.fog)
+                RenderSettings.fog = false;
         }
 
     }

@@ -79,6 +79,9 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] AudioClip Ambient2;
     [SerializeField] AudioClip Ambient3;
     [SerializeField] AudioClip Ambient4;
+    [Header("PostProccess")]
+    [SerializeField] UnityEngine.Rendering.VolumeProfile volumeProfile;
+
     enum DepthLevel
     {
         Mid,
