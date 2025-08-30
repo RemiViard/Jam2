@@ -18,7 +18,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] WaterZone waterZone;
     [SerializeField] CapsuleCollider2D capsuleCollider;
     [SerializeField] Camera mainCamera;
-
+    [SerializeField] Transform deepTrans;
+    [SerializeField] Transform verydeepTrans;
     [Header("Stats")]
     public int movementSpeed;
     [SerializeField] int jumpForce;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
 
     Rigidbody2D rb;
     public bool isFlip = false;
+    Quaternion pivotBaseRot;
     Vector3 lastDirection = Vector3.zero;
     Vector2 movementInput = new Vector2();
     InputAction moveAction;
@@ -76,7 +78,13 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] AudioClip Ambient2;
     [SerializeField] AudioClip Ambient3;
     [SerializeField] AudioClip Ambient4;
-
+    enum DepthLevel
+    {
+        Mid,
+        Deep,
+        VeryDeep
+    }
+    DepthLevel currentDepth = DepthLevel.Mid;
     PlayerState state = PlayerState.OnLand;
     enum PlayerState
     {
@@ -99,6 +107,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         O2 = maxO2;
         OnO2ValueChange.Invoke(O2 / maxO2);
         baseGravityScale = rb.gravityScale;
+        pivotBaseRot = pivot.localRotation;
         if (playerTransform == null)
             playerTransform = transform;
     }
@@ -153,7 +162,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
                     {
                         audiosource.clip = SwimSound;
-                        //audiosource.Play();
+                        audiosource.Play();
                         SwimTimer = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
@@ -204,7 +213,34 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     diveForceInitial = Vector2.zero;
                 }
                 //O2 Logics
-                O2Change(O2 - Time.deltaTime);
+                if (transform.position.y < deepTrans.position.y)
+                {
+                    if (transform.position.y < verydeepTrans.position.y)
+                    {
+                        if (currentDepth != DepthLevel.VeryDeep)
+                            ChangeDept(DepthLevel.VeryDeep);
+                    }
+                    else
+                    {
+                        if (currentDepth != DepthLevel.Deep)
+                            ChangeDept(DepthLevel.Deep);
+                    }
+                }
+                else
+                    if (currentDepth != DepthLevel.Mid)
+                        ChangeDept(DepthLevel.Mid);
+                
+                float multiplicator = 1;
+                switch (currentDepth)
+                {
+                    case DepthLevel.Deep:
+                        multiplicator = 2;
+                        break;
+                    case DepthLevel.VeryDeep:
+                        multiplicator = 3;
+                        break;
+                }
+                O2Change(O2 - Time.deltaTime * multiplicator);
                 break;
         }
         //Dash Cooldown
@@ -233,9 +269,9 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, -Camera.main.transform.position.z));
-            if(mouseWorldPos.x == pivot.position.x)
+            if (mouseWorldPos.x == pivot.position.x)
             {
-                mouseWorldPos.x = pivot.position.x+0.01f;
+                mouseWorldPos.x = pivot.position.x + 0.01f;
             }
             pivot.LookAt(mouseWorldPos, Vector3.up);
             animator.SetTrigger("Punch");
@@ -313,8 +349,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         animator.SetBool("isSwimming", true);
-        //audiosource.clip = SplashSound;
-        //audiosource.Play();
+        audiosource.clip = SplashSound;
+        audiosource.Play();
     }
     public void ExitWater()
     {
@@ -329,6 +365,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             dashReleaseTimer = 0;
             pivot.localRotation = Quaternion.Euler(0, isFlip ? -90 : 90, 0);
         }
+        currentDepth = DepthLevel.Mid;
         animator.SetBool("isSwimming", false);
         O2Change(maxO2);
     }
@@ -347,12 +384,28 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             O2 = maxO2;
         }
     }
+    private void ChangeDept(DepthLevel depthLevel)
+    {
+        switch (depthLevel)
+        {
+            case DepthLevel.Mid:
+
+                break;
+            case DepthLevel.Deep:
+
+                break;
+            case DepthLevel.VeryDeep:
+
+                break;
+        }
+        currentDepth = depthLevel;
+    }
     private void Die()
     {
         hurtbox.DesactivateHurtbox();
         OnDeath.Invoke();
         transform.position = spawnPoint.position;
-        pivot.localRotation = Quaternion.Euler(0, 90, 0);
+        pivot.localRotation = pivotBaseRot;
         O2Change(maxO2);
         hurtbox.ActivateHurtbox();
     }
