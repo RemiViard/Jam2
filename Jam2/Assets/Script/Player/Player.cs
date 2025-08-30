@@ -292,9 +292,11 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             case PlayerState.OnLand:
                 if (CheckGround())
                 {
-
-                    rb.linearVelocityY = 0;
-                    rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    if (isActive)
+                    {
+                        rb.linearVelocityY = 0;
+                        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    }
                 }
                 break;
             case PlayerState.InWater:
