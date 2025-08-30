@@ -102,6 +102,14 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                                 ChangeDirection(transform.position - Player.playerTransform.position);
                                 state = BehaviorState.Fleeing;
                             }
+                            else
+                            {
+                                if (currentDir != Vector3.zero)
+                                    transform.LookAt(transform.position + currentDir);
+                                else
+                                    ChangeDirection();
+                                Move(species.speed / 2);
+                            }   
                             break;
                         case FishBehavior.Neutral:
                             if (currentDir != Vector3.zero)
@@ -216,9 +224,12 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     {
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent(out Hurtbox hb) && hit.tag == "PlayerHurtbox")
+            if(hit != null)
             {
-                hb.Hit(species.damage);
+                if (hit.TryGetComponent(out Hurtbox hb) && hit.tag == "PlayerHurtbox")
+                {
+                    hb.Hit(species.damage);
+                }
             }
         }
     }

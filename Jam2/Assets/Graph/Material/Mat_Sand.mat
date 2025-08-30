@@ -98,7 +98,7 @@ Material:
     - _Boolean: 1
     - _BumpScale: 1
     - _CausticsAlpha: 1
-    - _CausticsIsActive: 1
+    - _CausticsIsActive: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
