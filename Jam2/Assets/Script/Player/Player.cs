@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] Animator animator;
     [SerializeField] Transform spawnPoint;
     [SerializeField] Hitbox attackHitBox;
+    [SerializeField] Hurtbox hurtbox;
     [SerializeField] Transform pivot;
     [SerializeField] WaterZone waterZone;
     [SerializeField] CapsuleCollider2D capsuleCollider;
@@ -152,7 +153,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
                     {
                         audiosource.clip = SwimSound;
-                        audiosource.Play();
+                        //audiosource.Play();
                         SwimTimer = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
@@ -285,7 +286,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     }
     public void Attack()
     {
-        attackHitBox.ActivateHitBox();
+        attackHitBox.ActivateHitBoxOnce();
     }
     public void OnTouch(List<Collider2D> hits)
     {
@@ -312,8 +313,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         animator.SetBool("isSwimming", true);
-        audiosource.clip = SplashSound;
-        audiosource.Play();
+        //audiosource.clip = SplashSound;
+        //audiosource.Play();
     }
     public void ExitWater()
     {
@@ -348,13 +349,17 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     }
     private void Die()
     {
+        hurtbox.DesactivateHurtbox();
         OnDeath.Invoke();
         transform.position = spawnPoint.position;
+        pivot.localRotation = Quaternion.Euler(0, 90, 0);
         O2Change(maxO2);
+        hurtbox.ActivateHurtbox();
     }
 
     public void OnHurt(int damage)
     {
+        Debug.Log("Player Hurt");
         O2Change(O2 - damage);
     }
 }

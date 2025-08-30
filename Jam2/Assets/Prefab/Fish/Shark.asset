@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9e1fa20be4b4f24c82897cb6f2921e3, type: 3}
   m_Name: Shark
   m_EditorClassIdentifier: Assembly-CSharp::FishSpecies
-  behavior: 1
+  behavior: 2
   speciesName: Shark
   fishSprite: {fileID: 21300000, guid: 7141a451fd0fad842bab343d146a8c8d, type: 3}
   Hp: 20
-  speed: 3
+  speed: 5
+  damage: 10
   hurtBox: {x: -0.1, y: 0.1, z: 2.1, w: 0.35}
   scale: 0.3
   fishBiscuit: {fileID: 21300000, guid: bba78152139389a4caa087f122c2a123, type: 3}

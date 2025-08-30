@@ -16,6 +16,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] float detectionRange;
     [SerializeField] Hurtbox hurtbox;
+    [SerializeField] Hitbox hitbox;
     public UnityEvent<FishSpecies> onDeath = new UnityEvent<FishSpecies>();
     Vector3 deathPos = Vector3.zero;
     float deathTimer = 0f;
@@ -23,7 +24,9 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     BehaviorState state = BehaviorState.Neutral;
     Vector3 currentDir = Vector3.zero;
     float zigzagTimer = 0f;
-    public BoxCollider2D deptZone;
+    float attackTimer = 0f;
+    float chargeTime = 1f;
+    [HideInInspector] public BoxCollider2D deptZone;
     public enum FishBehavior
     {
         Fleeing,
@@ -50,6 +53,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         spriteRenderer.sprite = species.fishSprite;
         gameObject.name = species.speciesName;
         hurtbox.InitBoxSize(species.hurtBox);
+        hitbox.InitBoxSize(species.hurtBox);
         onDeath.AddListener(Furnace.instance.OnDeadFish);
         if (species.scale != 0)
             transform.localScale = Vector3.one * species.scale;
@@ -68,11 +72,11 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                         state = BehaviorState.Neutral;
                         zigzagTimer = 0f;
                     }
-                    else if (distanceToPlayer <= detectionRange*0.5f && zigzagTimer <= 0)
+                    else if (distanceToPlayer <= detectionRange * 0.5f && zigzagTimer <= 0)
                     {
                         Vector2 dir = currentDir;
                         currentDir = (transform.position - Player.playerTransform.position).normalized;
-                        if (!CheckBound())
+                        if (CheckBound())
                             currentDir = dir;
                         else
                         {
@@ -86,7 +90,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                         if (zigzagTimer <= 0)
                             zigzagTimer = 0;
                     }
-                        
+
                     break;
                 case BehaviorState.Neutral:
                     switch (species.behavior)
@@ -106,16 +110,50 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
                             Move(species.speed / 2);
                             break;
                         case FishBehavior.Aggressive:
+                            if (currentDir != Vector3.zero)
+                                transform.LookAt(transform.position + currentDir);
+                            else
+                                ChangeDirection();
+                            Move(species.speed / 2);
                             if (Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange)
+                            {
                                 state = BehaviorState.Attacking;
+                                attackTimer = 1f;
+                            }
+
                             break;
                         default:
                             break;
                     }
                     break;
                 case BehaviorState.Attacking:
-
-                default:
+                    ChangeDirection((Player.playerTransform.position - transform.position).normalized);
+                    if (Vector3.Distance(transform.position, Player.playerTransform.position) >= detectionRange)
+                    {
+                        Move(species.speed);
+                        if (Vector3.Distance(transform.position, Player.playerTransform.position) >= detectionRange * 3f)
+                            state = BehaviorState.Neutral;
+                    }
+                    if (Vector3.Distance(transform.position, Player.playerTransform.position) <= detectionRange *1.5f)
+                        attackTimer -= Time.deltaTime;
+                    if (attackTimer <= 0)
+                    {
+                        state = BehaviorState.Charging;
+                        hitbox.ActivateHitBox();
+                    }
+                    break;
+                case BehaviorState.Charging:
+                    attackTimer += Time.deltaTime;
+                    if(CheckBound(2))
+                        Move(species.speed * 2);
+                    else
+                        attackTimer = chargeTime;
+                    if (attackTimer >= chargeTime)
+                    {
+                        state = BehaviorState.Attacking;
+                        hitbox.DeactivateHitBox();
+                        attackTimer = chargeTime;
+                    }
                     break;
             }
         }
@@ -143,18 +181,18 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     }
     void Move(float speed)
     {
-        if (!CheckBound())
+        if (!CheckBound(speed))
         {
             currentDir = -currentDir;
             transform.LookAt(transform.position + currentDir);
-        } 
+        }
         transform.position += currentDir * speed * Time.deltaTime;
     }
-    bool CheckBound()
+    bool CheckBound(float speed = 1f)
     {
         if (currentDir == null)
             ChangeDirection();
-        return deptZone.bounds.Contains(transform.position + currentDir * Time.deltaTime);
+        return deptZone.bounds.Contains(transform.position + currentDir * speed* Time.deltaTime);
     }
 
     public void OnHurt(int damage)
@@ -174,6 +212,13 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     // Events
     public void OnTouch(List<Collider2D> hits)
     {
-        throw new System.NotImplementedException();
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent(out Hurtbox hb) && hit.tag == "PlayerHurtbox")
+            {
+                Debug.Log("Hit " + hit.gameObject.name + " for " + species.damage + " damage.");
+                hb.Hit(species.damage);
+            }
+        }
     }
 }
