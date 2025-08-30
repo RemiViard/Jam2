@@ -7,11 +7,13 @@ public class UI_Shop : MonoBehaviour
 {
     [SerializeField] Player player;
     public UnityEvent onNotBuy;
+    public UnityEvent onBuy;
     [SerializeField] List<GameObject> list = new List<GameObject>();
 
     private void Start()
     {
         onNotBuy?.AddListener(NotEnoughBiscuits);
+        onBuy?.AddListener(OnBuy);
     }
     public void TryToBuy(int i)
     {
@@ -19,18 +21,26 @@ public class UI_Shop : MonoBehaviour
 
         if (player.nbBiscuits >= _dataUpgrade.cost)
         {
-            OnBuy(_dataUpgrade);
+            Upgrade(_dataUpgrade);
             player.nbBiscuits -= _dataUpgrade.cost;
+            player.UpdateUI();
+
             list[i].GetComponent<Button>().enabled = false;
+            onBuy?.Invoke();
         }
         else
         {
             onNotBuy?.Invoke();
         }
     }
-    void OnBuy(Upgrade upgrade)
+    void Upgrade(Upgrade upgrade)
     {
         upgrade.Action(player);
+    }
+
+    void OnBuy()
+    {
+
     }
 
     void NotEnoughBiscuits()
