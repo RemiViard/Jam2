@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 using static UnityEngine.InputSystem.InputAction;
 
 public class Player : MonoBehaviour, IHurtable, ICanHit
@@ -81,6 +82,10 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] AudioClip Ambient4;
     [Header("PostProccess")]
     [SerializeField] UnityEngine.Rendering.VolumeProfile volumeProfile;
+    [Header("Fx")]
+    [SerializeField] ParticleSystem dashFX;
+    [SerializeField] ParticleSystem punchFX;
+    [SerializeField] ParticleSystem diveFX;
 
     enum DepthLevel
     {
@@ -124,10 +129,10 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     // Update is called once per frame
     void Update()
     {
-        if (!isActive)
-            return;
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
+        if (!isActive)
+            movementInput = Vector2.zero;
         switch (state)
         {
             case PlayerState.OnLand:
@@ -166,8 +171,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     SwimTimer += Time.deltaTime;
                     if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
                     {
-                        audiosource.clip = SwimSound;
-                        audiosource.Play();
+                        
                         SwimTimer = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
@@ -233,8 +237,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 }
                 else
                     if (currentDepth != DepthLevel.Mid)
-                        ChangeDept(DepthLevel.Mid);
-                
+                    ChangeDept(DepthLevel.Mid);
+
                 float multiplicator = 1;
                 switch (currentDepth)
                 {
@@ -266,10 +270,12 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 PunchCooldownTimer = 0;
             }
         }
+
     }
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
     {
+        if (!isActive) return;
         if (PunchCooldownTimer <= 0 && (state == PlayerState.InWater))
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
@@ -282,11 +288,13 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             animator.SetTrigger("Punch");
             animator.SetBool("OnAction", true);
             PunchCooldownTimer = punchCooldown;
+            punchFX.Play();
         }
     }
 
     void OnDash(InputAction.CallbackContext callbackContext)
     {
+        if (!isActive) return;
         switch (state)
         {
             case PlayerState.OnLand:
@@ -306,6 +314,9 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     dashReleaseTimer = dashDuration;
                     Vector2 direction = movementInput != Vector2.zero ? movementInput : new Vector2(isFlip ? -1 : 1, 0);
                     dashForceInitial = direction * dashSpeed;
+                    audiosource.clip = SwimSound;
+                    audiosource.Play();
+                    dashFX.Play();
                 }
                 break;
         }
