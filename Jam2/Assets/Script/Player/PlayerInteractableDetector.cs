@@ -6,9 +6,9 @@ public class PlayerInteractableDetector : MonoBehaviour
 {
     [SerializeField] InputActionAsset actions;
     [SerializeField] Player player;
-
+    
     private IInteractable interactableInRange = null;
-
+    [SerializeField] InteractInRange interactionInRange;
     private void Start()
     {
         actions.FindAction("Interact").performed += OnInteract;
@@ -18,6 +18,7 @@ public class PlayerInteractableDetector : MonoBehaviour
         if (collision.TryGetComponent(out IInteractable interactable))
         {
             interactableInRange = interactable;
+            interactionInRange.Activate(collision.transform.position);
             if (collision.TryGetComponent<Furnace>(out Furnace furnace))
             {
                 furnace.onCanInteract?.Invoke();
@@ -33,6 +34,7 @@ public class PlayerInteractableDetector : MonoBehaviour
                 furnace.onStopInteract?.Invoke();
             }
             interactableInRange = null;
+            interactionInRange.Deactivate();
         }
     }
     void OnInteract(InputAction.CallbackContext callbackContext)
