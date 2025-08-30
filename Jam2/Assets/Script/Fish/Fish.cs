@@ -14,7 +14,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     private Rigidbody2D rb;
     private float m_currentTimer;
     [SerializeField] SpriteRenderer spriteRenderer;
-    [SerializeField] float detectionRange;
+    float detectionRange;
     [SerializeField] Hurtbox hurtbox;
     [SerializeField] Hitbox hitbox;
     public UnityEvent<FishSpecies> onDeath = new UnityEvent<FishSpecies>();
@@ -55,6 +55,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         hurtbox.InitBoxSize(species.hurtBox);
         hitbox.InitBoxSize(species.hurtBox);
         onDeath.AddListener(Furnace.instance.OnDeadFish);
+        detectionRange = species.detectionRange;
         if (species.scale != 0)
             transform.localScale = Vector3.one * species.scale;
     }

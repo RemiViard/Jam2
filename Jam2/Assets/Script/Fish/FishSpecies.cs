@@ -13,5 +13,6 @@ public class FishSpecies : ScriptableObject
     public float scale;
     public Sprite fishBiscuit;
     public int value;
+    public float detectionRange = 5f;
 }
 // This is a ScriptableObject that can be used to define different fish species in the game.
