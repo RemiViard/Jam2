@@ -9,7 +9,7 @@ public class UI_Shop : MonoBehaviour
     public UnityEvent onNotBuy;
     public UnityEvent onBuy;
     [SerializeField] List<GameObject> list = new List<GameObject>();
-
+    [SerializeField] Sprite cross;
     private void Start()
     {
         onNotBuy?.AddListener(NotEnoughBiscuits);
@@ -26,6 +26,7 @@ public class UI_Shop : MonoBehaviour
             player.UpdateUI();
 
             list[i].GetComponent<Button>().enabled = false;
+            list[i].GetComponent<Image>().sprite = cross;
             onBuy?.Invoke();
         }
         else
