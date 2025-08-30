@@ -59,6 +59,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
     public UnityEvent OnDeath = new UnityEvent(); // v2 :event pour la mort du joueur
     bool OnLand = true;
+    bool isActive = true;
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI TextCountBiscuits;
@@ -120,7 +121,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     // Update is called once per frame
     void Update()
     {
-
+        if (!isActive)
+            return;
         //Movement
         movementInput = moveAction.ReadValue<Vector2>();
         switch (state)
@@ -414,5 +416,9 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     {
         Debug.Log("Player Hurt");
         O2Change(O2 - damage);
+    }
+    public void SetActive(bool value)
+    {
+        isActive = value;
     }
 }
