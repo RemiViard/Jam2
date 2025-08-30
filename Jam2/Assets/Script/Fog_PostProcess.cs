@@ -10,11 +10,6 @@ public class Fog_PostProcess : MonoBehaviour
     float watersurface = -2.66f;
     float endSurface = -5f;
     Vector2 fogDensityMinMax = new Vector2(0f, 0.021f);
-    private void Start()
-    {
-        terrain.materialTemplate = sandMat[1];
-        //sandMaterial.SetPropertyLock("CausticsIsActive", true);
-    }
     private void Update()
     {
         if (_player.transform.position.y < watersurface)

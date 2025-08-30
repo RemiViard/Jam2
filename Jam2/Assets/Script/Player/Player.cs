@@ -85,7 +85,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [Header("Fx")]
     [SerializeField] ParticleSystem dashFX;
     [SerializeField] ParticleSystem punchFX;
-    [SerializeField] ParticleSystem diveFX;
+    [SerializeField] ParticleSystem splashFX;
 
     enum DepthLevel
     {
@@ -369,6 +369,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         animator.SetBool("isSwimming", true);
         audiosource.clip = SplashSound;
         audiosource.Play();
+        splashFX.Play();
     }
     public void ExitWater()
     {
@@ -385,6 +386,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         }
         currentDepth = DepthLevel.Mid;
         animator.SetBool("isSwimming", false);
+        splashFX.Play();
         O2Change(maxO2);
     }
     #endregion
