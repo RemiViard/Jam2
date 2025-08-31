@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class InteractableShop : MonoBehaviour, IInteractable
 {
     public UnityEvent onInteract;
+    public GameObject shopUI;
     private void Start()
     {
         onInteract.AddListener(OnInteractEvent);
@@ -15,7 +16,7 @@ public class InteractableShop : MonoBehaviour, IInteractable
 
     public void Interact(Player player)
     {
-        onInteract.Invoke();
+        shopUI.SetActive(!shopUI.activeSelf);
     }
     private void OnInteractEvent()
     {
