@@ -22,6 +22,6 @@ MonoBehaviour:
   hurtBox: {x: -0.1, y: 0.1, z: 2.1, w: 0.35}
   scale: 0.3
   fishBiscuit: {fileID: 21300000, guid: bba78152139389a4caa087f122c2a123, type: 3}
-  value: 20
+  value: 30
   detectionRange: 5
   isGigantic: 0

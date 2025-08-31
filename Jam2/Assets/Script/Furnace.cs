@@ -22,6 +22,7 @@ public class Furnace : MonoBehaviour, IInteractable
     public UnityEvent onStopInteract;
     public static Furnace instance;
     public List<FishSpecies> waitingFishs = new List<FishSpecies>();
+    [SerializeField] float GoToHUDDuration = 1.0f;
     public void OnDeadFish(FishSpecies fishSpecies)
     {
         waitingFishs.Add(fishSpecies);
@@ -98,12 +99,11 @@ public class Furnace : MonoBehaviour, IInteractable
 
         float t = 0;
 
-        while (t <= 2f)
+        while (t <= GoToHUDDuration)
         {
-            _biscuit.transform.position = Vector3.Lerp(basePos, TargetPos.position, t);
             t += Time.deltaTime;
-
-            yield return 0;
+            _biscuit.transform.position = Vector3.Lerp(basePos, TargetPos.position, t/GoToHUDDuration);
+            yield return null;
         }
         _biscuit.GetComponent<Animator>().SetTrigger("Destroy");
         Destroy(_biscuit);

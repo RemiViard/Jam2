@@ -28,6 +28,8 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     float chargeTime = 1f;
     [HideInInspector] public BoxCollider2D deptZone;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] Animation anim;
+    [SerializeField] ParticleSystem onDeathFx;
     public enum FishBehavior
     {
         Fleeing,
@@ -171,7 +173,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         {
             deathTimer += Time.deltaTime;
             rb.linearVelocity = Vector2.zero;
-            transform.position = deathPos + Vector3.up * Mathf.Sin(deathTimer) * 0.4f;
+            //transform.position = deathPos + Vector3.up * Mathf.Sin(deathTimer) * 0.4f;
             if (deathTimer >= rotDuration)
             {
                 onDeath.RemoveAllListeners();
@@ -215,6 +217,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
         {
             audioSource.Play();
             onDeath.Invoke(species);
+            anim.Play();
             deathPos = transform.position;
             transform.rotation = Quaternion.Euler(180, 90, 0);
             hurtbox.DesactivateHurtbox();
@@ -222,6 +225,10 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
             spriteRenderer.sprite = species.fishSpriteDead;
             isAlive = false;
         }
+    }
+    public void OnDeathFx()
+    {
+        onDeathFx.Play();
     }
     // Events
     public void OnTouch(List<Collider2D> hits)
