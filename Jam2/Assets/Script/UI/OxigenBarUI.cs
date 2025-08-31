@@ -6,6 +6,7 @@ public class OxigenBarUI : MonoBehaviour
     float fillSpriteSize;
     [SerializeField] RectTransform fillTransform;
     [SerializeField] RectMask2D fillMask;
+    [SerializeField] AudioSource panicAudio;
     Image fillImage;
     float ToGoValue;
     [SerializeField] Color panicColor;
@@ -44,11 +45,13 @@ public class OxigenBarUI : MonoBehaviour
         if(value <= 0.3f && !isInPanic)
         {
             isInPanic = true;
+            panicAudio.Play();
             timerPanic = 0f;
         }
         else if(value > 0.3f && isInPanic)
         {
             isInPanic = false;
+            panicAudio.Stop();
             fillImage.color = baseColor;
             timerPanic = 0f;
         }
