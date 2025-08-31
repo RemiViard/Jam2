@@ -15,9 +15,13 @@ MonoBehaviour:
   behavior: 0
   speciesName: Lancon
   fishSprite: {fileID: 21300000, guid: be6e675787881644dbfe88256653bc78, type: 3}
+  fishSpriteDead: {fileID: 21300000, guid: fcc65da5f7c5055458287e1da1ccddb8, type: 3}
   Hp: 2
   speed: 6
+  damage: 0
   hurtBox: {x: 0, y: 0, z: 3, w: 0.3}
   scale: 0.25
   fishBiscuit: {fileID: 21300000, guid: 60f8903d4cd238a46a375f736b60f3a7, type: 3}
   value: 1
+  detectionRange: 5
+  isGigantic: 0

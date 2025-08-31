@@ -15,6 +15,7 @@ MonoBehaviour:
   behavior: 2
   speciesName: GiganticBream
   fishSprite: {fileID: 21300000, guid: 133a6c23c30eee649be132feccc2ccca, type: 3}
+  fishSpriteDead: {fileID: 21300000, guid: d63fbe433a91bbd4394d5598a2be8576, type: 3}
   Hp: 100
   speed: 5
   damage: 100
@@ -23,3 +24,4 @@ MonoBehaviour:
   fishBiscuit: {fileID: 21300000, guid: f3dbdf10dfc22ab44817babc023b9ec9, type: 3}
   value: 500
   detectionRange: 15
+  isGigantic: 0

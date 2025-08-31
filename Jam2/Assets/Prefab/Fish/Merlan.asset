@@ -15,9 +15,13 @@ MonoBehaviour:
   behavior: 0
   speciesName: Merlan
   fishSprite: {fileID: 21300000, guid: 1eb79297cea92bd409d2fa059f8be3eb, type: 3}
+  fishSpriteDead: {fileID: 21300000, guid: 92e3ec2baf828444f864055582aed5a3, type: 3}
   Hp: 10
   speed: 2
+  damage: 0
   hurtBox: {x: 0, y: 0, z: 1.2, w: 0.3}
   scale: 0.35
   fishBiscuit: {fileID: 21300000, guid: fba6e6a69dd8e8147b74a11d926eb69b, type: 3}
   value: 5
+  detectionRange: 5
+  isGigantic: 0

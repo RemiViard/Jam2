@@ -15,6 +15,7 @@ MonoBehaviour:
   behavior: 2
   speciesName: Merlu
   fishSprite: {fileID: 21300000, guid: 7ed7cab68db545e4aa1cc887d8b787d4, type: 3}
+  fishSpriteDead: {fileID: 21300000, guid: 80e42a2dd0cc91e4695fdd097bd227bc, type: 3}
   Hp: 10
   speed: 3
   damage: 5
