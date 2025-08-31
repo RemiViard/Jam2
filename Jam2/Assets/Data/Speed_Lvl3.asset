@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Speed_Lvl3
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 2
-  cost: 27
-  value: 5
+  cost: 150
+  value: 3
   m_name: Faster???!!!
-  m_description: You gain +5 (Too much) speed.
+  m_description: You gain +3 (Too much) speed.

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resp_Lvl3
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 0
-  cost: 30
+  cost: 150
   value: 60
   m_name: Max Oxygen
   m_description: Allow you to go deeper. You have +120s maximum oxygen.
