@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Damages_Lvl2
   m_EditorClassIdentifier: Assembly-CSharp::Upgrade
   stat: 1
-  cost: 15
+  cost: 80
   value: 2
   m_name: Punch More
   m_description: You deal +2 more damages when punching.
