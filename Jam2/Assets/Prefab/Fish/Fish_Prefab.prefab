@@ -30,7 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5627872517766831301}
   - {fileID: 1583909506932189294}
@@ -59,7 +59,7 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  rotDuration: 10
+  rotDuration: 1
   deptZone: {fileID: 0}
   audioSource: {fileID: 768113744199041153}
 --- !u!50 &8871983923943939791
