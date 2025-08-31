@@ -11,6 +11,10 @@ public class PauseMenuUi : MonoBehaviour
     {
         Time.timeScale = 1f;
     }
+    public void ResumeButton()
+    {
+        gameObject.SetActive(false);
+    }
     public void QuitButton()
    {
         Application.Quit();
