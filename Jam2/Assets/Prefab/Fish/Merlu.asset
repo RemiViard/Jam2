@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9e1fa20be4b4f24c82897cb6f2921e3, type: 3}
-  m_Name: Limande
+  m_Name: Merlu
   m_EditorClassIdentifier: Assembly-CSharp::FishSpecies
-  behavior: 1
-  speciesName: Limande
-  fishSprite: {fileID: 21300000, guid: 87325738d75f2534a8d4146880a5da30, type: 3}
-  Hp: 6
-  speed: 1
-  damage: 0
-  hurtBox: {x: 0, y: 0, z: 1.2, w: 0.6}
-  scale: 0.35
-  fishBiscuit: {fileID: 21300000, guid: 4afe83cf8b984414e9b35d52a4b86f7a, type: 3}
-  value: 4
+  behavior: 2
+  speciesName: Merlu
+  fishSprite: {fileID: 21300000, guid: 7ed7cab68db545e4aa1cc887d8b787d4, type: 3}
+  Hp: 10
+  speed: 3
+  damage: 5
+  hurtBox: {x: -0.1, y: -0.02, z: 2.1, w: 0.4}
+  scale: 0.4
+  fishBiscuit: {fileID: 21300000, guid: 8ada9e63f2aa5de488d28bf2265f6513, type: 3}
+  value: 3
   detectionRange: 5

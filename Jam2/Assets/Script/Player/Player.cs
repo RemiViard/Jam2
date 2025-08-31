@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using TMPro;
@@ -177,7 +178,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     SwimTimer += Time.deltaTime;
                     if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
                     {
-                        
+
                         SwimTimer = 0;
                     }
                     transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
@@ -413,7 +414,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         }
         currentDepth = DepthLevel.Mid;
         animator.SetBool("isSwimming", false);
-        splashFX.Play();
+        if (isActive)
+            splashFX.Play();
         O2Change(maxO2);
     }
     #endregion
@@ -450,13 +452,19 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     private void Die()
     {
         hurtbox.DesactivateHurtbox();
+        isActive = false;
         OnDeath.Invoke();
         transform.position = spawnPoint.position;
         pivot.localRotation = pivotBaseRot;
         O2Change(maxO2);
         hurtbox.ActivateHurtbox();
+        StartCoroutine(WaitRespawn());
     }
-
+    IEnumerator WaitRespawn()
+    {
+        yield return 0;
+        isActive = true;
+    }
     public void OnHurt(int damage)
     {
         O2Change(O2 - damage);
