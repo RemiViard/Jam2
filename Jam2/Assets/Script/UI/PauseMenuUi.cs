@@ -3,8 +3,15 @@ using UnityEngine.Audio;
 
 public class PauseMenuUi : MonoBehaviour
 {
-   [SerializeField] AudioListener audioListener;
-   public void QuitButton()
+    private void OnEnable()
+    {
+        Time.timeScale = 0f;
+    }
+    private void OnDisable()
+    {
+        Time.timeScale = 1f;
+    }
+    public void QuitButton()
    {
         Application.Quit();
    }

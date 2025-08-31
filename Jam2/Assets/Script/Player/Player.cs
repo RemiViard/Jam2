@@ -22,6 +22,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] Camera mainCamera;
     [SerializeField] Transform deepTrans;
     [SerializeField] Transform verydeepTrans;
+    [SerializeField] GameObject shopUI;
+    [SerializeField] GameObject menuPauseUI;
     [Header("Stats")]
     public int movementSpeed;
     [SerializeField] int jumpForce;
@@ -78,13 +80,6 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     public float maximumSwimTime = 1.2f;
     private float SwimTimer = 0;
 
-    [Header("Ambients")]
-    [SerializeField] AudioClip Ambient1;
-    [SerializeField] AudioClip Ambient2;
-    [SerializeField] AudioClip Ambient3;
-    [SerializeField] AudioClip Ambient4;
-    [Header("PostProccess")]
-    [SerializeField] UnityEngine.Rendering.VolumeProfile volumeProfile;
     [Header("Fx")]
     [SerializeField] ParticleSystem dashFX;
     [SerializeField] ParticleSystem punchFX;
@@ -117,6 +112,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         moveAction = actions.FindAction("Move");
         actions.FindAction("Attack").performed += OnAttack;
         actions.FindAction("Dash").performed += OnDash;
+        actions.FindAction("Escape").performed += OnEscape;
         actions.Enable();
         nbBiscuits = 0;
         UpdateUI();
@@ -341,8 +337,18 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 break;
         }
     }
-    #endregion
-    bool CheckGround()
+    void OnEscape(InputAction.CallbackContext callbackContext)
+    {
+        if(isActive)
+        {
+            if (shopUI.activeSelf)
+                shopUI.SetActive(false);
+            else
+                menuPauseUI.SetActive(!menuPauseUI.activeSelf);
+        }
+    }
+        #endregion
+        bool CheckGround()
     {
         float _distanceToTheGround = capsuleCollider.size.y / 3;
 
