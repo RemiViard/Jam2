@@ -6,6 +6,7 @@ public class FishSpecies : ScriptableObject
     public Fish.FishBehavior behavior;
     public string speciesName;
     public Sprite fishSprite;
+    public Sprite fishSpriteDead;
     public int Hp;
     public float speed;
     public int damage;
