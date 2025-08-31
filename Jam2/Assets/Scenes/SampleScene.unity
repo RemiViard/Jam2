@@ -9724,6 +9724,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2106173094}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 147.24
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -81.42
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.02
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84bb3a34b1fe2f54f8ec178536297e0a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.911
@@ -9767,22 +9783,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 84bb3a34b1fe2f54f8ec178536297e0a, type: 3}
       propertyPath: m_Name
       value: Mesh_PanneauAmeliorationTuto
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 147.24
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -81.42
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -5.02
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 7286d656d0c4e6d4f8dcf2060c21ae02, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27223,7 +27223,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -12.46}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 414.94998, y: -165}
+  m_AnchoredPosition: {x: 415, y: -165}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2012170832
@@ -27322,7 +27322,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -29817,6 +29817,14 @@ PrefabInstance:
     - target: {fileID: 1880182098920410253, guid: 524aaafe8b3b5384a9d55b2bc3796917, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880182098920410253, guid: 524aaafe8b3b5384a9d55b2bc3796917, type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880182098920410253, guid: 524aaafe8b3b5384a9d55b2bc3796917, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2250308468573289195, guid: 524aaafe8b3b5384a9d55b2bc3796917, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
