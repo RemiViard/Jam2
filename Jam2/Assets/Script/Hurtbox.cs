@@ -11,9 +11,10 @@ public class Hurtbox : MonoBehaviour
     Color baseColor;
     [SerializeField] Color hitColor;
     [SerializeField] float hitColorDuration = 0.1f;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] ParticleSystem hurtFX;
     private void Start()
     {
-
         baseColor = spriteRenderers[0].color;
     }
     private void Update()
@@ -38,6 +39,9 @@ public class Hurtbox : MonoBehaviour
     }
     public void Hit(int damage)
     {
+        if (!audioSource.isPlaying)
+            audioSource.Play();
+        hurtFX.Play();
         OnHurt.Invoke(damage);
         foreach (var spriteRenderer in spriteRenderers)
         {

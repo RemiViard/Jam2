@@ -27,6 +27,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
     float attackTimer = 0f;
     float chargeTime = 1f;
     [HideInInspector] public BoxCollider2D deptZone;
+    [SerializeField] AudioSource audioSource;
     public enum FishBehavior
     {
         Fleeing,
@@ -212,6 +213,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
             state = BehaviorState.Fleeing;
         if (Hp <= 0)
         {
+            audioSource.Play();
             onDeath.Invoke(species);
             deathPos = transform.position;
             transform.rotation = Quaternion.Euler(180, 90, 0);

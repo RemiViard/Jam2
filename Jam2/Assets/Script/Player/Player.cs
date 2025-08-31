@@ -73,6 +73,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [Header("Sounds")]
     [SerializeField] AudioClip SplashSound;
     [SerializeField] AudioClip SwimSound;
+    [SerializeField] AudioClip PunchSound;
     public float minimumSwimTime = 0.8f;
     public float maximumSwimTime = 1.2f;
     private float SwimTimer = 0;
@@ -306,6 +307,8 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
             animator.SetBool("OnAction", true);
             PunchCooldownTimer = punchCooldown;
             punchFX.Play();
+            audiosource.clip = PunchSound;
+            audiosource.Play();
         }
     }
 
