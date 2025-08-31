@@ -1,42 +1,65 @@
-using System;
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BiscuitDiscoveryUI : MonoBehaviour
 {
     [SerializeField] Player player;
     [SerializeField] InputActionAsset action;
-    Animation anim;
+    [SerializeField] Image fishSprite;
+    [SerializeField] Animation spawnAnim;
+    [SerializeField] AnimationClip appearAnimName;
+    [SerializeField] AnimationClip disapearingAnimName;
+    [SerializeField] List<FishSpecies> listSprites = new List<FishSpecies>();
     bool isDisapearing = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    private void Awake()
     {
-        action.FindAction("Escape").performed += OnInput;
-        action.FindAction("Interact").performed += OnInput;
+        action.FindAction("Attack").performed += OnInput;
+        spawnAnim.AddClip(appearAnimName, appearAnimName.name);
+        spawnAnim.AddClip(disapearingAnimName, disapearingAnimName.name);
     }
     private void Update()
     {
-        if (anim.IsPlaying("Disapear") && !isDisapearing)
-        {
+        if (!isDisapearing && spawnAnim.IsPlaying(disapearingAnimName.name))
             isDisapearing = true;
-        }
-        if(isDisapearing && !anim.isPlaying)
+        else if (isDisapearing && !spawnAnim.isPlaying)
         {
-            isDisapearing = false;
-            gameObject.SetActive(false);
+            CheckEndList();
         }
+    }
+    public void SetSprite(List<FishSpecies> sprite)
+    {
+        listSprites = sprite;
+    }
+    public void Init()
+    {
+        spawnAnim.Rewind();
+        fishSprite.sprite = listSprites[0].fishBiscuit;
+        listSprites.RemoveAt(0);
+        spawnAnim.Play(appearAnimName.name);
+    }
+    void CheckEndList()
+    {
+        isDisapearing = false;
+        if (listSprites.Count > 0)
+            Init();
+        else
+            gameObject.SetActive(false);
     }
     void OnInput(InputAction.CallbackContext callbackContext)
     {
-        anim.Play("Disapear");
+        spawnAnim.Play(disapearingAnimName.name);
     }
     private void OnEnable()
     {
         player.SetActive(false);
-        anim.Play("Idle");
     }
     private void OnDisable()
     {
         player.SetActive(true);
+        
     }
 }

@@ -12,6 +12,7 @@ public class Furnace : MonoBehaviour, IInteractable
 
     [SerializeField] Transform HUDPos;
     [SerializeField] Transform TargetPos;
+    [SerializeField] BiscuitDiscoveryUI biscuitDiscovery;
 
     [Header("Audio")]
     AudioSource audioSource;
@@ -21,6 +22,7 @@ public class Furnace : MonoBehaviour, IInteractable
     public UnityEvent onCanInteract;
     public UnityEvent onStopInteract;
     public static Furnace instance;
+    public List<FishSpecies> UndiscoveredFish;
     public List<FishSpecies> waitingFishs = new List<FishSpecies>();
     [SerializeField] float GoToHUDDuration = 1.0f;
     public void OnDeadFish(FishSpecies fishSpecies)
@@ -56,7 +58,21 @@ public class Furnace : MonoBehaviour, IInteractable
     }
     IEnumerator WaitAndGainCookie(Player player)
     {
-
+        List<FishSpecies> discovered = new List<FishSpecies>();
+        foreach (var fish in waitingFishs)
+        {
+            if(UndiscoveredFish.Contains(fish))
+            {
+                discovered.Add(fish);
+                UndiscoveredFish.Remove(fish);
+            }
+        }
+        if (discovered.Count > 0)
+        {
+            biscuitDiscovery.SetSprite(discovered);
+            biscuitDiscovery.gameObject.SetActive(true);
+            biscuitDiscovery.Init();
+        }
         foreach (FishSpecies fish in waitingFishs)
         {
             //Sell
@@ -84,7 +100,7 @@ public class Furnace : MonoBehaviour, IInteractable
         audioSource.Play();
     }
     private void OnBiscuitAdded(FishSpecies fish)
-    {
+    { 
         prefabBiscuit.GetComponent<Image>().sprite = fish.fishBiscuit;
         GameObject go = Instantiate(prefabBiscuit, HUDPos);
         go.transform.localPosition = Vector3.zero;
