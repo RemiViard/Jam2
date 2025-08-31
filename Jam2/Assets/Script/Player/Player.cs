@@ -453,19 +453,20 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         currentDepth = depthLevel;
     }
     private void Die()
-    {
-        hurtbox.DesactivateHurtbox();
+    { 
         isActive = false;
-        OnDeath.Invoke();
-        transform.position = spawnPoint.position;
-        pivot.localRotation = pivotBaseRot;
-        O2Change(maxO2);
-        hurtbox.ActivateHurtbox();
         StartCoroutine(WaitRespawn());
     }
     IEnumerator WaitRespawn()
     {
-        yield return 0;
+        yield return new WaitForSeconds(0.1f);
+        OnDeath.Invoke();
+        hurtbox.DesactivateHurtbox();
+        transform.position = spawnPoint.position;
+        pivot.localRotation = pivotBaseRot;
+        O2Change(maxO2);
+        hurtbox.ActivateHurtbox();
+        splashFX.Stop();
         isActive = true;
     }
     public void OnHurt(int damage)

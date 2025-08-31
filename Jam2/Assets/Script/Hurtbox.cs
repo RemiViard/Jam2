@@ -40,7 +40,7 @@ public class Hurtbox : MonoBehaviour
     public void Hit(int damage)
     {
         //if (!audioSource.isPlaying)
-            audioSource.Play();
+        audioSource.Play();
         hurtFX.Play();
         OnHurt.Invoke(damage);
         foreach (var spriteRenderer in spriteRenderers)
@@ -55,8 +55,11 @@ public class Hurtbox : MonoBehaviour
     public void DesactivateHurtbox()
     {
         boxCollider.enabled = false;
-        audioSource.Stop();
-        hurtFX.Stop();
+        //audioSource.Stop();
+        foreach (var spriteRenderer in spriteRenderers)
+        {
+            spriteRenderer.color = baseColor;
+        }
     }
     public void PauseGameEffect(float duration)
     {
