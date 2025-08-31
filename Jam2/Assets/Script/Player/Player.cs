@@ -455,12 +455,14 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     private void Die()
     { 
         isActive = false;
+        waterZone.enabled = false;
         StartCoroutine(WaitRespawn());
     }
     IEnumerator WaitRespawn()
     {
         yield return new WaitForSeconds(0.1f);
         OnDeath.Invoke();
+        
         hurtbox.DesactivateHurtbox();
         transform.position = spawnPoint.position;
         pivot.localRotation = pivotBaseRot;
@@ -468,6 +470,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         hurtbox.ActivateHurtbox();
         splashFX.Stop();
         isActive = true;
+        waterZone.enabled = true;
     }
     public void OnHurt(int damage)
     {
