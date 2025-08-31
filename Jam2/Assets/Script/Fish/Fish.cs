@@ -218,6 +218,7 @@ public class Fish : MonoBehaviour, IHurtable, ICanHit
             deathPos = transform.position;
             transform.rotation = Quaternion.Euler(180, 90, 0);
             hurtbox.DesactivateHurtbox();
+            hitbox.DeactivateHitBox();
             isAlive = false;
         }
     }
