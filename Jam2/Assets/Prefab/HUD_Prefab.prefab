@@ -986,6 +986,7 @@ MonoBehaviour:
   - {fileID: 3269532261012815933}
   - {fileID: 2221023836927289390}
   - {fileID: 2032308173331475424}
+  cross: {fileID: 0}
 --- !u!82 &8806790655381161501
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1169,7 +1170,7 @@ GameObject:
   - component: {fileID: 1814080216759045593}
   - component: {fileID: 8814096263371514044}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Close_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1223,7 +1224,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6a0af995c64c9b5428f8d8bd2370cc7d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a8ab8b11ecbe2154c834848e65c5f641, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
