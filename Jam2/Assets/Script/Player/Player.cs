@@ -55,6 +55,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     float baseGravityScale;
 
     public int maxO2 = 10;
+    int baseMaxO2;
     float O2;
     public int nbBiscuits; // v2 : stocker poissons pour faire un type de biscuit par poisson
     public UnityEvent<float> OnO2ValueChange = new UnityEvent<float>(); // v2 : event pour la barre d'oxygene
@@ -86,6 +87,9 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     [SerializeField] ParticleSystem dashFX;
     [SerializeField] ParticleSystem punchFX;
     [SerializeField] ParticleSystem splashFX;
+    [Header("DeepMultiplicators")]
+    [SerializeField] float deepMultiplicator = 5f;
+    [SerializeField] float veryDeepMultiplicator = 10f;
 
     enum DepthLevel
     {
@@ -102,6 +106,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
     }
     public static Transform playerTransform = null;// static reference to the player transform for easy access(FishBehavior)
 
+    [SerializeField] List<Upgrade> O2Upgrade = new List<Upgrade>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -114,6 +119,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         nbBiscuits = 0;
         UpdateUI();
         O2 = maxO2;
+        baseMaxO2 = maxO2;
         OnO2ValueChange.Invoke(O2 / maxO2);
         baseGravityScale = rb.gravityScale;
         pivotBaseRot = pivot.localRotation;
@@ -222,6 +228,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                     diveForceInitial = Vector2.zero;
                 }
                 //O2 Logics
+
                 if (transform.position.y < deepTrans.position.y)
                 {
                     if (transform.position.y < verydeepTrans.position.y)
@@ -238,15 +245,25 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 else
                     if (currentDepth != DepthLevel.Mid)
                     ChangeDept(DepthLevel.Mid);
-
+                int deptValue = CheckDept();
                 float multiplicator = 1;
                 switch (currentDepth)
                 {
                     case DepthLevel.Deep:
-                        multiplicator = 2;
+                        if (deptValue >= 2)
+                            multiplicator = 1;
+                        else if (deptValue >= 1)
+                            multiplicator = 3;
+                        else
+                            multiplicator = deepMultiplicator;
                         break;
                     case DepthLevel.VeryDeep:
-                        multiplicator = 3;
+                        if (deptValue == 3)
+                            multiplicator = 1;
+                        else if (deptValue >= 2)
+                            multiplicator = 5;
+                        else
+                            multiplicator = veryDeepMultiplicator;
                         break;
                 }
                 O2Change(O2 - Time.deltaTime * multiplicator);
@@ -270,7 +287,6 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 PunchCooldownTimer = 0;
             }
         }
-
     }
     #region Input Callbacks
     void OnAttack(InputAction.CallbackContext callbackContext)
@@ -337,6 +353,17 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
         }
         return false;
 
+    }
+    int CheckDept()
+    {
+        int test = baseMaxO2;
+        for (int i = 0; i <= 3; i++)
+        {
+            if (test == maxO2)
+                return i;
+            test += O2Upgrade[i].value;
+        }
+        return -1;
     }
     public void Attack()
     {
