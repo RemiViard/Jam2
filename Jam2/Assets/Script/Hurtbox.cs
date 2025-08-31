@@ -39,7 +39,7 @@ public class Hurtbox : MonoBehaviour
     }
     public void Hit(int damage)
     {
-        if (!audioSource.isPlaying)
+        //if (!audioSource.isPlaying)
             audioSource.Play();
         hurtFX.Play();
         OnHurt.Invoke(damage);
@@ -55,6 +55,8 @@ public class Hurtbox : MonoBehaviour
     public void DesactivateHurtbox()
     {
         boxCollider.enabled = false;
+        audioSource.Stop();
+        hurtFX.Stop();
     }
     public void PauseGameEffect(float duration)
     {
