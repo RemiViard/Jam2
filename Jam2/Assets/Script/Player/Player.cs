@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using UnityEngine.VFX;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -166,11 +167,12 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
                 break;
             case PlayerState.InWater:
                 //Swimming Logic
+                Vector2 translate = movementInput;
                 if (movementInput != Vector2.zero && dashReleaseTimer == 0)
                 {
                     if (movementInput.y > 0 && transform.position.y >= waterZone.waterTopY - 0.1f)
                     {
-                        movementInput.y = 0;
+                        translate.y = 0;
                     }
                     SwimTimer += Time.deltaTime;
                     if (SwimTimer >= Random.Range(minimumSwimTime, maximumSwimTime))
@@ -178,7 +180,7 @@ public class Player : MonoBehaviour, IHurtable, ICanHit
 
                         SwimTimer = 0;
                     }
-                    transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * movementSpeed);
+                    transform.Translate(new Vector3(translate.x, translate.y, 0) * Time.deltaTime * movementSpeed);
                     //Rotate Logic
                     if (!animator.GetBool("OnAction"))
                     {

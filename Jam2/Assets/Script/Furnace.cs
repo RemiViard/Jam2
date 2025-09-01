@@ -24,6 +24,7 @@ public class Furnace : MonoBehaviour, IInteractable
     public static Furnace instance;
     public List<FishSpecies> UndiscoveredFish;
     public List<FishSpecies> waitingFishs = new List<FishSpecies>();
+    List<FishSpecies> cookingFishs = new List<FishSpecies>();
     [SerializeField] float GoToHUDDuration = 1.0f;
     public void OnDeadFish(FishSpecies fishSpecies)
     {
@@ -47,19 +48,27 @@ public class Furnace : MonoBehaviour, IInteractable
         onCanInteract.AddListener(OnCanInteract);
         onStopInteract.AddListener(OnStopInteract);
     }
+    private void Update()
+    {
+    }
     public bool CanInteract()
     {
         return true;
     }
     public void Interact(Player player)
     {
-        onInteract.Invoke();
-        StartCoroutine(WaitAndGainCookie(player));
+        if(waitingFishs.Count > 0)
+        {
+            cookingFishs = new List<FishSpecies>(waitingFishs);
+            waitingFishs.Clear();
+            onInteract.Invoke();
+            StartCoroutine(WaitAndGainCookie(player));
+        }
     }
     IEnumerator WaitAndGainCookie(Player player)
     {
         List<FishSpecies> discovered = new List<FishSpecies>();
-        foreach (var fish in waitingFishs)
+        foreach (var fish in cookingFishs)
         {
             if(UndiscoveredFish.Contains(fish))
             {
@@ -73,7 +82,7 @@ public class Furnace : MonoBehaviour, IInteractable
             biscuitDiscovery.gameObject.SetActive(true);
             biscuitDiscovery.Init();
         }
-        foreach (FishSpecies fish in waitingFishs)
+        foreach (FishSpecies fish in cookingFishs)
         {
             //Sell
             OnBiscuitAdded(fish);
@@ -83,7 +92,7 @@ public class Furnace : MonoBehaviour, IInteractable
 
             yield return new WaitForSeconds(1.0f);
         }
-        waitingFishs.Clear();
+        cookingFishs.Clear();
     }
 
     private void OnInteractEvent()
